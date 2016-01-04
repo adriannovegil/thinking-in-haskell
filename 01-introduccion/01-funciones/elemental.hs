@@ -9,7 +9,7 @@ module Main where
 -- media3 (-1) 0 7 == 2.0
 -- media3 (-3) 0 3 == 0.0
 
-media3 x y z = (x + y + z)	/ 3
+media3 x y z = (x + y + z) / 3
 
 -- 02 - Suma de euros de una colección de monedas.
 -- -----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ media3 x y z = (x + y + z)	/ 3
 -- sumaMonedas 0 0 8 0 3 == 100
 -- sumaMonedas 1 1 1 1 1 == 38
 
-
+sumaMonedas a b c d e = 1 * a + 2 * b + 5 * c + 10 * d + 20 * e
 
 -- 03 - Volumen de una esfera.
 -- -----------------------------------------------------------------------------
