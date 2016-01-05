@@ -122,7 +122,7 @@ rota n xs = drop n xs ++ take n xs
 --
 -- indicación: Se pueden usar min y max
 
-
+rango xs = [minimum xs, maximum xs]
 
 -- 10 - Reconocimiento de palíndromos.
 -- -----------------------------------------------------------------------------
