@@ -69,26 +69,30 @@ maxTres x y z = max x (max y z)
 -- La disyunción excluyente xor de dos fórmulas se verifica si una es verdadera
 -- y la otra es falsa.
 
--- 7.1 - Definir la función xor1 que calcule la fisyunción excluyente a partir
+-- 7.1 - Definir la función xor1 que calcule la disyunción excluyente a partir
 -- de la tabla de verdad. Usar 4 ecuaciones, una por cada línea de la tabla.
 
-
+xor1 True True = False
+xor1 True False = True
+xor1 False True = True
+xor1 False False = False
 
 -- 7.2 - Definir la función xor2 que calcule la disyunción excluyente a partir
 -- de la tabla de verdad y patrone. Usar 2 ecuaciones, una por cada valor del
 -- primer argumento.
 
-
+xor2 True y = not y
+xor2 False y = y
 
 -- 7.3 - Definir la función xor3 que calcule la disyunción ecluyente a partir
 -- de la disyunción (||), conjunción (&&) y negación (not). Usar 1 ecuación.
 
-
+xor3 x y = (x || y) && not (x && y)
 
 -- 7.4 - Definir la función xor4 que calcule la disyunción excluyente a partir
 -- de la desigualdad (/=). Usar 1 ecuación.
 
-
+xor4 x y = x /= y
 
 -- 08 - Rotación de listas.
 -- -----------------------------------------------------------------------------
