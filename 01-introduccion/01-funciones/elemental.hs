@@ -51,7 +51,7 @@ areaDeCoronaCircular r1 r2 = pi * (r2^2 - r1^2)
 --
 -- ultimaCifra 325 == 5
 
-
+ultimaCifra x = rem x 10
 
 -- 06 - Máximo de 3 elementos.
 -- -----------------------------------------------------------------------------
