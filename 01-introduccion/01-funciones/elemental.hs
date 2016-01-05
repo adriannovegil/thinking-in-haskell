@@ -62,7 +62,7 @@ ultimaCifra x = rem x 10
 -- maxTres 6 7 4 == 7
 -- maxTres 6 7 9 == 9
 
-
+maxTres x y z = max x (max y z)
 
 -- 07 - Disyunción excluyente.
 -- -----------------------------------------------------------------------------
