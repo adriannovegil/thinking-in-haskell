@@ -163,7 +163,7 @@ finales n xs = drop (length xs - n) xs
 -- segmento 3 5 [3,4,1,2,7,9,0] == [1,2,7]
 -- segmento 5 3 [3,4,1,2,7,9,0] == []
 
-
+segmento m n xs = drop (m - 1) (take n xs)
 
 -- 14 - Extremos de una lista.
 -- -----------------------------------------------------------------------------
