@@ -143,7 +143,7 @@ palindromo xs = xs == reverse xs
 -- interior [2,5,3,7,3] == [5,3,7]
 -- interior [2..7] == [3,4,5,6]
 
-
+interior xs = tail(init xs)
 
 -- 12 - Finales de una lista.
 -- -----------------------------------------------------------------------------
