@@ -130,10 +130,10 @@ rango xs = [minimum xs, maximum xs]
 -- un palíndromo; es decir, es lo mismo leer xs de izquierda a derecha que de
 -- derecha a izquierda. Por ejemplo,
 --
--- palindromo [3,2,5,2,3] == true
--- palindromo [3,2,5,6,2,3] == false
+-- palindromo [3,2,5,2,3] == True
+-- palindromo [3,2,5,6,2,3] == False
 
-
+palindromo xs = xs == reverse xs
 
 -- 11 - Elementos interiores de una lista.
 -- -----------------------------------------------------------------------------
