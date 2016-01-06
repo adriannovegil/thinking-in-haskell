@@ -172,7 +172,7 @@ segmento m n xs = drop (m - 1) (take n xs)
 --
 -- extremos 3 [2,6,7,1,2,4,5,8,9,2,3] == [2,6,7,9,2,3]
 
-
+extremos n xs = take n xs ++ drop (length xs - n) xs
 
 -- 15 - Mediano de 3 números.
 -- -----------------------------------------------------------------------------
