@@ -215,7 +215,7 @@ tresDiferentes x y z = x /= y && x /= z && y /= z
 --
 -- Indicación: Usar la función tresIguales.
 
-
+cuatroIguales x y z u = x == y && tresIguales y z u
 
 -- 18 - Propiedad triangular.
 -- -----------------------------------------------------------------------------
