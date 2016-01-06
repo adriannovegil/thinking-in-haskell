@@ -152,7 +152,7 @@ interior xs = tail(init xs)
 --
 -- finales 3 [2,5,4,7,9,6] == [7,9,6]
 
-
+finales n xs = drop (length xs - n) xs
 
 -- 13 - Segmentos de una lista.
 -- -----------------------------------------------------------------------------
