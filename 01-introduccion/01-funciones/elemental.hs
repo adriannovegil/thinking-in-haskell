@@ -195,7 +195,7 @@ mediano x y z = x + y + z - minimum [x,y,z] - maximum[x,y,z]
 -- tresIguales 4 4 4 == true
 -- tresIguales 4 3 4 == false
 
-
+tresIguales x y z = x == y && y == z
 
 -- 16.2 Definir la función tresDiferente tal que (tresDiferentes x y z) se
 -- verifica si los elementos x, y y z son distintos. Por ejemplo,
