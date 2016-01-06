@@ -241,7 +241,8 @@ triangular a b c = a < b + c && b < a + c && c < a + b
 -- divisionSegura 7 2 = 3.5
 -- divisionSegura 7 0 = 9999.0
 
-
+divisionSegura _ 0 = 9999
+divisionSegura x y = x / y
 
 -- 20 - Módulo de un vector.
 -- -----------------------------------------------------------------------------
