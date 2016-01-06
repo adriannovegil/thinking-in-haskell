@@ -231,7 +231,7 @@ cuatroIguales x y z u = x == y && tresIguales y z u
 -- triangular 3 40 5 == false
 -- triangular 3 4 50 == false
 
-
+triangular a b c = a < b + c && b < a + c && c < a + b
 
 -- 19 - División segura.
 -- -----------------------------------------------------------------------------
