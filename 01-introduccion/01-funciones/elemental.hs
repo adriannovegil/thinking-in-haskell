@@ -184,7 +184,7 @@ extremos n xs = take n xs ++ drop (length xs - n) xs
 -- mediano 2 6 5 == 5
 -- mediano 2 6 6 == 6
 
-
+mediano x y z = x + y + z - minimum [x,y,z] - maximum[x,y,z]
 
 -- 16 - Igualdad y diferencia de 3 elementos.
 -- -----------------------------------------------------------------------------
