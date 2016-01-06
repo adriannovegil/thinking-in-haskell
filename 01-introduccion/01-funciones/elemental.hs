@@ -203,7 +203,7 @@ tresIguales x y z = x == y && y == z
 -- tresDiferentes 3 5 2 == true
 -- tresDiferentes 3 5 3 == false
 
-
+tresDiferentes x y z = x /= y && x /= z && y /= z
 
 -- 17 - Igualdad de 4 elementos.
 -- -----------------------------------------------------------------------------
