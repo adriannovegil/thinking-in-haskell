@@ -452,7 +452,7 @@ formaReducida (a,b) = (a `div` c, b `div` c)
 --
 -- sumaRacional (2,3) (5,6) == (3,2)
 
-
+sumaRacional (a,b) (c,d) = formaReducida (a * d + b * c, b * d)
 
 -- 30.3 - Producto de dos números racionales.
 -- Definir la función productoRacional tal que (productoRacional x y) es el
