@@ -334,7 +334,7 @@ puntoMedio (x1,y1) (x2,y2) = ((x1 + x2)/2,(y1 + y2)/2)
 --
 -- sumaComplejos (2,3) (5,6) == (7,9)
 
-
+sumaComplejos (x1,y1) (x2,y2) = (x1 + x2, y1 + y2)
 
 -- 23.2 - Producto de dos números complejos
 -- Definir la función productoComplejos tal que (productoComplejos x y) es el
