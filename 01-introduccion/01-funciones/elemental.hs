@@ -371,7 +371,8 @@ intercala [x1,x2] [y1,y2] = [x1,y1,x2,y2]
 -- ciclo [] == []
 -- ciclo [2] == [2]
 
-
+ciclo [] = []
+ciclo xs = last xs : init xs
 
 -- 26 - Mayor número de 2 cifras con dos dígitos dados.
 -- -----------------------------------------------------------------------------
