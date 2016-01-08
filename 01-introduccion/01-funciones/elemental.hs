@@ -382,7 +382,9 @@ ciclo xs = last xs : init xs
 -- numeroMayor 2 5 == 52
 -- numeroMayor 5 2 == 52
 
-
+numeroMayor x y = a * 10 + b
+  where a = max x y
+        b = min x y
 
 -- 27 - Número de raíces de una ecuación cuadrática.
 -- -----------------------------------------------------------------------------
