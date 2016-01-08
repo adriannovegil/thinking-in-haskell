@@ -340,9 +340,9 @@ sumaComplejos (x1,y1) (x2,y2) = (x1 + x2, y1 + y2)
 -- Definir la función productoComplejos tal que (productoComplejos x y) es el
 -- producto de los números complejos x e y. Por ejemplo,
 --
--- productoComplejos (2,3) (5,6)
+-- productoComplejos (2,3) (5,6) == (-8,27)
 
-
+productoComplejos (x1,y1) (x2,y2) = (x1 * x2 - y1 * y2,x1 * y2 + y1 * x2)
 
 -- 23.3 - Conjugado de un número complejo
 -- Definir la función conjugado tal que (conjugado z) es el conjugado del
