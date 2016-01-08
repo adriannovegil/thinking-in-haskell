@@ -303,7 +303,7 @@ intercambia (x,y) = (y,x)
 -- simetricoH (2,5) == (2,-5)
 -- simetricoH (2,-5) == (2,5)
 
-
+simetricoH (x,y) = (x,-y)
 
 -- 22.4 - Distancia entre dos puntos
 -- Definir la función distancia tal que (distancia p1 p2) es la distancia
