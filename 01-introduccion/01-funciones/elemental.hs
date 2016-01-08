@@ -468,3 +468,6 @@ productoRacional (a,b) (c,d) = formaReducida (a * c, b * d)
 --
 -- igualdadRacional (6,9) (10,15) == true
 -- igualdadRacional (6,9) (11,15) == false
+
+igualdadRacional (a,b) (c,d) =
+    formaReducida (a,b) == formaReducida (c,d)
