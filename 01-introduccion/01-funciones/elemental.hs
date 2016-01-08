@@ -429,7 +429,8 @@ raices_2 a b c
 --
 -- area 3 4 5 == 6.0
 
-
+area a b c = sqrt (s * (s - a) * (s - b) * (s - c))
+    where s = (a + b + c) / 2
 
 -- 30 - Números racionales como pares de enteros.
 -- -----------------------------------------------------------------------------
