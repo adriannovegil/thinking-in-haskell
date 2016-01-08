@@ -281,7 +281,11 @@ mayorRectangulo (a,b) (c,d) | a * b >= c*d = (a,b)
 -- cuadrante (-3,-5) == 3
 -- cuadrante (3,-5) == 4
 
-
+cuadrante (x,y)
+    | x > 0 && y > 0 = 1
+    | x < 0 && y > 0 = 2
+    | x < 0 && y < 0 = 3
+    | x > 0 && y < 0 = 4
 
 -- 22.2 - Intercambio de coordenadas
 -- Definir la función intercambia tal que (intercambia p) es el punto obtenido
