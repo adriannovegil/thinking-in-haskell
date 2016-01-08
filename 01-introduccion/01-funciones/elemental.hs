@@ -460,7 +460,7 @@ sumaRacional (a,b) (c,d) = formaReducida (a * d + b * c, b * d)
 --
 -- productoRacional (2,3) (5,6) == (5,9)
 
-
+productoRacional (a,b) (c,d) = formaReducida (a * c, b * d)
 
 -- 30.4 - Igualdad de números racionales.
 -- Definir la función igualdadRacional tal que (igualdadRacional x y) se
