@@ -437,17 +437,14 @@ area a b c = sqrt (s * (s - a) * (s - b) * (s - c))
 -- Los números racionales pueden representarse mediante pares de números
 -- enteros. Por ejemplo, el número 2/5 puede representarse mediante el par (2,5)
 
--- Función para el cálculo de mínimo como un divisor
-
-
-
 -- 30.1 - Forma reducida de un número racional.
 -- Definir la función formaReducida ral que (formaReducida x) es la forma
 -- reducida del número racional x. Por ejemplo,
 --
 -- formaReducida (4,10) == (2,5)
 
-
+formaReducida (a,b) = (a `div` c, b `div` c)
+    where c = gcd a b
 
 -- 30.2 - Suma de dos números racionales.
 -- Definir la función sumaRacional tal que (sumaRacional x y) es la suma de
