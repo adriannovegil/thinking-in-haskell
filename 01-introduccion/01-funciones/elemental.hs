@@ -294,7 +294,7 @@ cuadrante (x,y)
 -- intercambia (2,5) == (5,2)
 -- intercambia (5,2) == (2,5)
 
-
+intercambia (x,y) = (y,x)
 
 -- 22.3 - Punto simétrico
 -- Definir la función simétricoH tal que (simetricoH p) es el punto simétrico
