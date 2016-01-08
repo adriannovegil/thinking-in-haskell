@@ -264,7 +264,8 @@ modulo (x,y) = sqrt(x^2+y^2)
 -- mayorRectangulo (4,6) (3,8) == (4,6)
 -- mayorRectangulo (4,6) (3,9) == (3,9)
 
-
+mayorRectangulo (a,b) (c,d) | a * b >= c*d = (a,b)
+                            | otherwise = (c,d)
 
 -- 22 - Puntos de plano.
 -- -----------------------------------------------------------------------------
