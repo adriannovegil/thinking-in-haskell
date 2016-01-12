@@ -1,4 +1,4 @@
-
+module Main where
 
 -- 01 - Suma de los cuadrados de los n primeros números.
 -- -----------------------------------------------------------------------------
@@ -12,7 +12,8 @@
 -- sumaDeCuadrados 3 = 14
 -- sumaDeCuadrados 100 = 338350
 
-
+sumaDeCuadrados :: Integer -> Integer
+sumaDeCuadrados n = sum [x^2 | x <- [1..n]]
 
 -- 02 - Listas con un elemento replicado.
 -- -----------------------------------------------------------------------------
