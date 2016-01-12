@@ -55,7 +55,7 @@ suma' n = (1 + n) * n `div` 2
 -- linea 4 == [7,8,9,10]
 -- linea 5 == [11,12,13,14,15]
 
-
+linea n = [suma (n - 1) + 1 .. suma(n)]
 
 -- 3.3 - definir la función triángulo tal que (triangulo n) es el
 -- triángulo artimético de altura n. Por ejemplo,
