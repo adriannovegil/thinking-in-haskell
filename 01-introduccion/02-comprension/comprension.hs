@@ -24,9 +24,10 @@ sumaDeCuadrados n = sum [x^2 | x <- [1..n]]
 -- tal que (replica n x) es la lista formada por n copias del elemento x. Por
 -- ejemplo,
 --
--- replica 3 true == [true, true, true]
+-- replica 3 True == [True, True, True]
 
-
+replica :: Int -> a -> [a]
+replica n x = [x | _ <- [1..n]]
 
 -- 03 - Triángulos aritméticos.
 -- -----------------------------------------------------------------------------
