@@ -37,7 +37,8 @@ replica n x = [x | _ <- [1..n]]
 --
 -- suma 3 == 6
 
-
+suma n = sum [1..n]
+suma' n = (1 + n) * n `div` 2
 
 -- 3.2 - Los triángulos aritméticos se forman somo sigue.
 --
