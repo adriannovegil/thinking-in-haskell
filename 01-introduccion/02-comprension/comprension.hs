@@ -77,7 +77,11 @@ triangulo n = [linea m | m <- [1..n]]
 --
 -- perfectos 500 == [6, 28, 496]
 
+factores :: Int -> [Int]
+factores n = [x | x <- [1..n], n `mod` x == 0]
 
+perfectos :: Int -> [Int]
+perfectos n = [x | x <- [1..n], sum (init (factores x)) == x]
 
 -- 05 - Números abundantes.
 -- -----------------------------------------------------------------------------
