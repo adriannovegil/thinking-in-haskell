@@ -108,7 +108,8 @@ numeroAbundante n = n < sum (divisores n)
 --
 -- numerosAbundantesMenores 50 = [12,18,20,24,30,36,40,42,48]
 
-
+numerosAbundantesMenores :: Int -> [Int]
+numerosAbundantesMenores n = [x | x <- [1..n], numeroAbundante x]
 
 -- 5.3 - Definir la función todosPares tal que (todosPares n) se verifica si
 -- todos los números abundantes menores o iguales que n son pares. Por
