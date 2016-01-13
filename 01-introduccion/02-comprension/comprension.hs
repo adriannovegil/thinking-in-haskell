@@ -96,7 +96,11 @@ perfectos n = [x | x <- [1..n], sum (init (factores x)) == x]
 -- numeroAbundante 28 == False
 -- numeroAbundante 30 == True
 
+divisores :: Int -> [Int]
+divisores n = [m | m <- [1..n-1], n `mod` m == 0]
 
+numeroAbundante :: Int -> Bool
+numeroAbundante n = n < sum (divisores n)
 
 -- 5.2 - Definir una función numerosAbundantesMenores tal que
 -- (numerosAbundantesMenores n) es la lista de número abundantes menores o
