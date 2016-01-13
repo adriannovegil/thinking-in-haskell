@@ -125,7 +125,11 @@ todosPares n = and [even x | x <- numerosAbundantesMenores n]
 -- 5.4 - Definir la constante primerAbundanteImpar que calcule el primer número
 -- natural abundante impar. Determinar el valor de dicho número.
 
+primerAbundanteImpar :: Int
+primerAbundanteImpar = head [x | x <- [1..], numeroAbundante x, odd x]
 
+-- *Main> primerAbundanteImpar
+-- 945
 
 -- 06 - Problema 1 del Proyecto Euler.
 -- -----------------------------------------------------------------------------
