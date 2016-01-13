@@ -119,7 +119,8 @@ numerosAbundantesMenores n = [x | x <- [1..n], numeroAbundante x]
 -- todosPares 100 = True
 -- todosPares 1000 = False
 
-
+todosPares :: Int -> Bool
+todosPares n = and [even x | x <- numerosAbundantesMenores n]
 
 -- 5.4 - Definir la constante primerAbundanteImpar que calcule el primer número
 -- natural abundante impar. Determinar el valor de dicho número.
