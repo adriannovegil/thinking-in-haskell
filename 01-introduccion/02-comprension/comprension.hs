@@ -142,7 +142,12 @@ primerAbundanteImpar = head [x | x <- [1..], numeroAbundante x, odd x]
 --
 -- euler1 10 == 23
 
+euler1 :: Integer -> Integer
+euler1 n = sum [x | x <- [1..n-1], multiplo x 3 || multiplo x 5]
+	where multiplo x y = mod x y == 0
 
+-- *Main> euler1 1000
+-- 233168
 
 -- 07 - Número de pares de naturales en un círculo.
 -- -----------------------------------------------------------------------------
@@ -196,8 +201,8 @@ primerAbundanteImpar = head [x | x <- [1..], numeroAbundante x, odd x]
 -- Definir la función aproxE2 tal que (aproxE2 n) es la aproximación de e que
 -- se obtiene sumando los términos de la serie hasta 1/n!. Por ejemplo,
 --
--- aproxE2 10 = 2.718281801146385
--- aproxE2 100 = 2.7182818284590455
+-- aproxE' 10 = 2.718281801146385
+-- aproxE' 100 = 2.7182818284590455
 
 
 
@@ -209,10 +214,10 @@ primerAbundanteImpar = head [x | x <- [1..], numeroAbundante x, odd x]
 -- número de términos de la serie anterior necesarios para obtener e con un
 -- error menor que x. Por ejemplo,
 --
--- errorAproxE2 0.1 == 3.0
--- errorAproxE2 0.01 == 4.0
--- errorAproxE2 0.001 == 6.0
--- errorAproxE2 0.0001 == 7.0
+-- errorE' 0.1 == 3.0
+-- errorE' 0.01 == 4.0
+-- errorE' 0.001 == 6.0
+-- errorE' 0.0001 == 7.0
 
 
 
