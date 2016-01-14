@@ -193,7 +193,7 @@ aproxE n = [(1 + 1 / m) ** m | m <- [1..n]]
 --
 -- Indicación: En Erlang, e se calcula como math:exp(1).
 
-
+errorAproxE x = head [m | m <- [1..], abs((exp 1) - (1 + 1 / m) ** m) < x]
 
 -- 8.4 - El número e también se puede definir como la suma de la siere:
 --
