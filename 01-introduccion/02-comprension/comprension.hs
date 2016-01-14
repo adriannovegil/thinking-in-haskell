@@ -205,7 +205,9 @@ errorAproxE x = head [m | m <- [1..], abs((exp 1) - (1 + 1 / m) ** m) < x]
 -- aproxE' 10 = 2.718281801146385
 -- aproxE' 100 = 2.7182818284590455
 
+aproxE' n = 1 + sum [1 / factorial k | k <- [1..n]]
 
+factorial n = product [1..n]
 
 -- 8.5 - Definir la constante e como 2,71828459.
 
