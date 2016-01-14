@@ -175,7 +175,7 @@ circulo n = length [(x,y) | x <- [0..n], y <- [0..n], x^2 + y^2 < n^2]
 -- aproxE 1 == [2.0]
 -- aproxE 4 == [2.0, 2.25, 2.37037037037037, 2.44140625]
 
-
+aproxE n = [(1 + 1 / m) ** m | m <- [1..n]]
 
 -- 8.2 - Cual es el límite de la sucesión (1 + 1/m )^m?
 
