@@ -162,7 +162,8 @@ euler1 n = sum [x | x <- [1..n-1], multiplo x 3 || multiplo x 5]
 -- circulo 4 = 15
 -- circulo 5 = 22
 
-
+circulo :: Int -> Int
+circulo n = length [(x,y) | x <- [0..n], y <- [0..n], x^2 + y^2 < n^2]
 
 -- 08 - Aproximación del número e.
 -- -----------------------------------------------------------------------------
