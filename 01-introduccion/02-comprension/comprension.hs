@@ -249,7 +249,7 @@ aproxLimSeno n = [sin(1/m) / (1/m) | m <- [1..n]]
 -- errorLimSeno 0.001 == 13.0
 -- errorLimSeno 0.0001 == 41.0
 
-
+errorLimSeno x = head [m | m <- [1..], abs(1 - sin(1/m) / (1/m)) < x]
 
 -- 10 - Cálculo del número pi.
 -- -----------------------------------------------------------------------------
