@@ -211,9 +211,9 @@ factorial n = product [1..n]
 
 -- 8.5 - Definir la constante e como 2,71828459.
 
--- Solución: E = 2.71828459.
+e = 2.71828459
 
--- 8.6 - Definir la función errorAproxE2 tal que (errorAproxE2 x) es el menor
+-- 8.6 - Definir la función errorE' tal que (errorAproxE2 x) es el menor
 -- número de términos de la serie anterior necesarios para obtener e con un
 -- error menor que x. Por ejemplo,
 --
@@ -222,7 +222,7 @@ factorial n = product [1..n]
 -- errorE' 0.001 == 6.0
 -- errorE' 0.0001 == 7.0
 
-errorE' x = head [n | n <- [0..], abs(aproxE' n - e) < x]
+
 
 -- 09 - Aproximación del límite.
 -- -----------------------------------------------------------------------------
