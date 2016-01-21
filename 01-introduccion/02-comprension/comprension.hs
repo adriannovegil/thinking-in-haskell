@@ -231,10 +231,10 @@ errorE' x = head [n | n <- [0..], abs(aproxE' n - e) < x]
 -- cuyos elementos son los términos de la sucesión sen(1/m)/(1/m) desde 1 hasta
 -- n. Por ejemplo,
 --
--- aproxLimSeno 1 =
--- aproxLimSeno 2 =
+-- aproxLimSeno 1 = [0.8114709848078965]
+-- aproxLimSeno 2 = [0.8114709848078965, 0.958851077208406]
 
-
+aproxLimSeno n = [sin(1/m) / (1/m) | m <- [1..n]]
 
 -- 9.2 - ¿Cuál es el límite de la sucesión sen(1/m)/(1/m)?
 
