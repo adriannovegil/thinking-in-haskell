@@ -292,7 +292,11 @@ errorPi x = head [ n | n <- [1..], abs (pi - (calculaPi n)) < x]
 --
 -- pitagoricas 10 == [(3,4,5), (4,3,5), (6,8,10), (8,6,10)]
 
-
+pitagoricas :: Int -> [(Int,Int,Int)]
+pitagoricas n = [(x,y,z) | x <- [1..n],
+													 y <- [1..n],
+													 z <- [1..n],
+													 x^2 + y^2 == z^2]
 
 -- 11.2 - Definir la función
 --
