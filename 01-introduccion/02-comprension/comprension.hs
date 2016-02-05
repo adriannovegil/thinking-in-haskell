@@ -264,7 +264,7 @@ errorLimSeno x = head [m | m <- [1..], abs(1 - sin(1/m) / (1/m)) < x]
 -- calculaPi 3 == 2.8952380952380956
 -- calculaPi 300 == 3.1449149035588526
 
-
+calculaPi n = 4 * sum [(-1)**x / (2 * x + 1) | x <- [0..n]]
 
 -- 10.2 - Definir la función errorPi tal que (errorPi x) es el menor número de
 -- términos de la serie
