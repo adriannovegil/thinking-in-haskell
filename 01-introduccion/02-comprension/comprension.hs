@@ -310,7 +310,8 @@ pitagoricas n = [(x,y,z) | x <- [1..n],
 -- numeroDePares (3,6,4) == 2
 -- numeroDePares (4,6,4) == 3
 
-
+numeroDePares :: (Int,Int,Int) -> Int
+numeroDePares (x,y,z) = sum [1 | n <- [x,y,z], even n]
 
 -- 11.3 - Definir la función
 --
