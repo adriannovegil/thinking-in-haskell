@@ -277,7 +277,7 @@ calculaPi n = 4 * sum [(-1)**x / (2 * x + 1) | x <- [0..n]]
 -- errorPi 0.01 == 99.0
 -- errorPi 0.001 == 999.0
 
-
+errorPi x = head [ n | n <- [1..], abs (pi - (calculaPi n)) < x]
 
 -- 11 - Ternas pitagóricas.
 -- -----------------------------------------------------------------------------
