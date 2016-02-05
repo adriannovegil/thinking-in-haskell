@@ -323,7 +323,8 @@ numeroDePares (x,y,z) = sum [1 | n <- [x,y,z], even n]
 --
 -- conjetura 10 == true
 
-
+conjetura :: Int -> Bool
+conjetura n = and [odd (numeroDePares t) | t <- pitagoricas n]
 
 -- 11.4 Demostrar la conjetura para todas las ternas pitagóricas.
 
