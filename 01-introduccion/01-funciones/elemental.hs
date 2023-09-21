@@ -1,4 +1,4 @@
-module Main where
+module Elemental where
 
 main :: IO ()
 main = return ()
