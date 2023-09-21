@@ -1,6 +1,9 @@
-module Main where
+module Comprension where
 
--- 01 - Suma de los cuadrados de los n primeros números.
+main :: IO ()
+main = return ()
+
+-- 2.1 - Suma de los cuadrados de los n primeros números.
 -- -----------------------------------------------------------------------------
 -- Definir, por comprensión, la función
 --
@@ -15,7 +18,7 @@ module Main where
 sumaDeCuadrados :: Integer -> Integer
 sumaDeCuadrados n = sum [x^2 | x <- [1..n]]
 
--- 02 - Listas con un elemento replicado.
+-- 2.2 - Listas con un elemento replicado.
 -- -----------------------------------------------------------------------------
 -- Definir por comprensión la función
 --
@@ -29,10 +32,10 @@ sumaDeCuadrados n = sum [x^2 | x <- [1..n]]
 replica :: Int -> a -> [a]
 replica n x = [x | _ <- [1..n]]
 
--- 03 - Triángulos aritméticos.
+-- 2.3 - Triángulos aritméticos.
 -- -----------------------------------------------------------------------------
-
--- 3.1 - Definir la función suma tal que (suma n) es la suma de los n primeros
+--
+-- 2.3.1 - Definir la función suma tal que (suma n) es la suma de los n primeros
 -- números. Por ejemplo,
 --
 -- suma 3 == 6
@@ -40,7 +43,7 @@ replica n x = [x | _ <- [1..n]]
 suma n = sum [1..n]
 suma' n = (1 + n) * n `div` 2
 
--- 3.2 - Los triángulos aritméticos se forman somo sigue.
+-- 2.3.2 - Los triángulos aritméticos se forman somo sigue.
 --
 --  1
 --  2  3
@@ -57,7 +60,7 @@ suma' n = (1 + n) * n `div` 2
 
 linea n = [suma (n - 1) + 1 .. suma(n)]
 
--- 3.3 - definir la función triángulo tal que (triangulo n) es el
+-- 2.3.3 - definir la función triángulo tal que (triangulo n) es el
 -- triángulo artimético de altura n. Por ejemplo,
 --
 -- triangulo 3 = [[1], [2,3], [4,5,6]]
@@ -65,7 +68,7 @@ linea n = [suma (n - 1) + 1 .. suma(n)]
 
 triangulo n = [linea m | m <- [1..n]]
 
--- 04 - Números perfectos.
+-- 2.4 - Números perfectos.
 -- -----------------------------------------------------------------------------
 -- Un enetero positivo es perfecto si es igual a la suma de sus factores,
 -- excluyendo el propio número. Definir por comprensión la función
@@ -83,12 +86,12 @@ factores n = [x | x <- [1..n], n `mod` x == 0]
 perfectos :: Int -> [Int]
 perfectos n = [x | x <- [1..n], sum (init (factores x)) == x]
 
--- 05 - Números abundantes.
+-- 2.5 - Números abundantes.
 -- -----------------------------------------------------------------------------
 -- Un número natural n se denomina abundante si es menor que la suma de sus
 -- divisores propios. Por ejemplo, 12 y 30 son abundantes pero 5 y 28 no lo son.
-
--- 5.1 - Definir una función numeroAbundante tal que (numeroAbundante n) se
+--
+-- 2.5.1 - Definir una función numeroAbundante tal que (numeroAbundante n) se
 -- verifica si n es un número abundante. Por ejemplo,
 --
 -- numeroAbundante 5 == False
@@ -102,7 +105,7 @@ divisores n = [m | m <- [1..n-1], n `mod` m == 0]
 numeroAbundante :: Int -> Bool
 numeroAbundante n = n < sum (divisores n)
 
--- 5.2 - Definir una función numerosAbundantesMenores tal que
+-- 2.5.2 - Definir una función numerosAbundantesMenores tal que
 -- (numerosAbundantesMenores n) es la lista de número abundantes menores o
 -- iguales que n. Por ejemplo,
 --
@@ -111,7 +114,7 @@ numeroAbundante n = n < sum (divisores n)
 numerosAbundantesMenores :: Int -> [Int]
 numerosAbundantesMenores n = [x | x <- [1..n], numeroAbundante x]
 
--- 5.3 - Definir la función todosPares tal que (todosPares n) se verifica si
+-- 2.5.3 - Definir la función todosPares tal que (todosPares n) se verifica si
 -- todos los números abundantes menores o iguales que n son pares. Por
 -- ejemplo,
 --
@@ -122,7 +125,7 @@ numerosAbundantesMenores n = [x | x <- [1..n], numeroAbundante x]
 todosPares :: Int -> Bool
 todosPares n = and [even x | x <- numerosAbundantesMenores n]
 
--- 5.4 - Definir la constante primerAbundanteImpar que calcule el primer número
+-- 2.5.4 - Definir la constante primerAbundanteImpar que calcule el primer número
 -- natural abundante impar. Determinar el valor de dicho número.
 
 primerAbundanteImpar :: Int
@@ -130,8 +133,8 @@ primerAbundanteImpar = head [x | x <- [1..], numeroAbundante x, odd x]
 
 -- *Main> primerAbundanteImpar
 -- 945
-
--- 06 - Problema 1 del Proyecto Euler.
+--
+-- 2.6 - Problema 1 del Proyecto Euler.
 -- -----------------------------------------------------------------------------
 -- Definir la función
 --
@@ -144,12 +147,12 @@ primerAbundanteImpar = head [x | x <- [1..], numeroAbundante x, odd x]
 
 euler1 :: Integer -> Integer
 euler1 n = sum [x | x <- [1..n-1], multiplo x 3 || multiplo x 5]
-	where multiplo x y = mod x y == 0
+    where multiplo x y = mod x y == 0
 
 -- *Main> euler1 1000
 -- 233168
-
--- 07 - Número de pares de naturales en un círculo.
+--
+-- 2.7 - Número de pares de naturales en un círculo.
 -- -----------------------------------------------------------------------------
 -- Definir la función
 --
@@ -165,10 +168,10 @@ euler1 n = sum [x | x <- [1..n-1], multiplo x 3 || multiplo x 5]
 circulo :: Int -> Int
 circulo n = length [(x,y) | x <- [0..n], y <- [0..n], x^2 + y^2 < n^2]
 
--- 08 - Aproximación del número e.
+-- 2.8 - Aproximación del número e.
 -- -----------------------------------------------------------------------------
-
--- 8.1 - Definir la función aproxE tal que (aproxE n) es la lista cuyos
+--
+-- 2.8.1 - Definir la función aproxE tal que (aproxE n) es la lista cuyos
 -- elementos son los términos de la sucesión (1 + 1/m )^m desde 1 hasta n. Por
 -- ejemplo,
 --
@@ -177,12 +180,12 @@ circulo n = length [(x,y) | x <- [0..n], y <- [0..n], x^2 + y^2 < n^2]
 
 aproxE n = [(1 + 1 / m) ** m | m <- [1..n]]
 
--- 8.2 - Cual es el límite de la sucesión (1 + 1/m )^m?
-
+-- 2.8.2 - Cual es el límite de la sucesión (1 + 1/m )^m?
+--
 -- Solución: El límite de la sucesión, cuando n tiende a infinito, es el
 -- número e.
-
--- 8.3 - Definir la función errorR tal que (errorAproxE x) es el menor número
+--
+-- 2.8.3 - Definir la función errorR tal que (errorAproxE x) es el menor número
 -- de términos de la sucesión (1 + 1/m )^m necesarios para obtener su límite
 -- con un error menor que x.
 -- Por ejemplo,
@@ -195,7 +198,7 @@ aproxE n = [(1 + 1 / m) ** m | m <- [1..n]]
 
 errorAproxE x = head [m | m <- [1..], abs((exp 1) - (1 + 1 / m) ** m) < x]
 
--- 8.4 - El número e también se puede definir como la suma de la siere:
+-- 2.8.4 - El número e también se puede definir como la suma de la siere:
 --
 -- 1/0! + 1/1! + 1/2! + 1/3! + ...
 --
@@ -209,11 +212,11 @@ aproxE' n = 1 + sum [1 / factorial k | k <- [1..n]]
 
 factorial n = product [1..n]
 
--- 8.5 - Definir la constante e como 2,71828459.
+-- 2.8.5 - Definir la constante e como 2,71828459.
 
 e = 2.71828459
 
--- 8.6 - Definir la función errorE' tal que (errorAproxE2 x) es el menor
+-- 2.8.6 - Definir la función errorE' tal que (errorAproxE2 x) es el menor
 -- número de términos de la serie anterior necesarios para obtener e con un
 -- error menor que x. Por ejemplo,
 --
@@ -224,10 +227,10 @@ e = 2.71828459
 
 errorE' x = head [n | n <- [0..], abs(aproxE' n - e) < x]
 
--- 09 - Aproximación del límite.
+-- 2.9 - Aproximación del límite.
 -- -----------------------------------------------------------------------------
-
--- 9.1 - Definir la función aproxLimSeno tal que (aproxLimSeno n) es la lista
+--
+-- 2.9.1 - Definir la función aproxLimSeno tal que (aproxLimSeno n) es la lista
 -- cuyos elementos son los términos de la sucesión sen(1/m)/(1/m) desde 1 hasta
 -- n. Por ejemplo,
 --
@@ -236,11 +239,11 @@ errorE' x = head [n | n <- [0..], abs(aproxE' n - e) < x]
 
 aproxLimSeno n = [sin(1/m) / (1/m) | m <- [1..n]]
 
--- 9.2 - ¿Cuál es el límite de la sucesión sen(1/m)/(1/m)?
-
+-- 2.9.2 - ¿Cuál es el límite de la sucesión sen(1/m)/(1/m)?
+--
 -- Solución: El límite es 1.
-
--- 9.3 - Definir la función errorLimSeno tal que (errorLimSeno x) es el menor
+--
+-- 2.9.3 - Definir la función errorLimSeno tal que (errorLimSeno x) es el menor
 -- número de términos de la sucecsión sen(1/m)/(1/m) necesarios para obtener
 -- su límite con un error menor que x. Por ejemplo,
 --
@@ -251,10 +254,10 @@ aproxLimSeno n = [sin(1/m) / (1/m) | m <- [1..n]]
 
 errorLimSeno x = head [m | m <- [1..], abs(1 - sin(1/m) / (1/m)) < x]
 
--- 10 - Cálculo del número pi.
+-- 2.10 - Cálculo del número pi.
 -- -----------------------------------------------------------------------------
-
--- 10.1 - definir la función calculaPi tal que (calculaPi n) es la aproximación
+--
+-- 2.10.1 - definir la función calculaPi tal que (calculaPi n) es la aproximación
 -- del número pi calculada mediante la expresión
 --
 -- 4 * (1 - 1/3 + 1/5 - 1/7 + ... + (-1)^n/(2n+1))
@@ -266,7 +269,7 @@ errorLimSeno x = head [m | m <- [1..], abs(1 - sin(1/m) / (1/m)) < x]
 
 calculaPi n = 4 * sum [(-1)**x / (2 * x + 1) | x <- [0..n]]
 
--- 10.2 - Definir la función errorPi tal que (errorPi x) es el menor número de
+-- 2.10.2 - Definir la función errorPi tal que (errorPi x) es el menor número de
 -- términos de la serie
 --
 -- 4 * (1 - 1/3 + 1/5 - 1/7 + ... + (-1)^n/(2n+1))
@@ -279,10 +282,10 @@ calculaPi n = 4 * sum [(-1)**x / (2 * x + 1) | x <- [0..n]]
 
 errorPi x = head [ n | n <- [1..], abs (pi - (calculaPi n)) < x]
 
--- 11 - Ternas pitagóricas.
+-- 2.11 - Ternas pitagóricas.
 -- -----------------------------------------------------------------------------
-
--- 11.1 - Una terna (x,y,z) de enteros positivos es pitagórica si x^2+Y^2 = z^2.
+--
+-- 2.11.1 - Una terna (x,y,z) de enteros positivos es pitagórica si x^2+Y^2 = z^2.
 -- Usando una lista por comprensión, definir la función
 --
 -- pitagoricas :: Int -> [(Int,Int,Int)]
@@ -294,11 +297,11 @@ errorPi x = head [ n | n <- [1..], abs (pi - (calculaPi n)) < x]
 
 pitagoricas :: Int -> [(Int,Int,Int)]
 pitagoricas n = [(x,y,z) | x <- [1..n],
-													 y <- [1..n],
-													 z <- [1..n],
-													 x^2 + y^2 == z^2]
+                           y <- [1..n],
+                           z <- [1..n],
+                           x^2 + y^2 == z^2]
 
--- 11.2 - Definir la función
+-- 2.11.2 - Definir la función
 --
 -- numeroDePares :: (Int, Int, Int) ->
 --
@@ -313,7 +316,7 @@ pitagoricas n = [(x,y,z) | x <- [1..n],
 numeroDePares :: (Int,Int,Int) -> Int
 numeroDePares (x,y,z) = sum [1 | n <- [x,y,z], even n]
 
--- 11.3 - Definir la función
+-- 2.11.3 - Definir la función
 --
 -- conjetura :: int -> Bool
 --
@@ -326,8 +329,8 @@ numeroDePares (x,y,z) = sum [1 | n <- [x,y,z], even n]
 conjetura :: Int -> Bool
 conjetura n = and [odd (numeroDePares t) | t <- pitagoricas n]
 
--- 11.4 Demostrar la conjetura para todas las ternas pitagóricas.
-
+-- 2.11.4 Demostrar la conjetura para todas las ternas pitagóricas.
+--
 -- Solución: Sea (x,y,z) una terna pitagórica. Entonces x^2+Y^2 = z^2. Pueden
 -- darse 4 casos:
 -- Caso 1: x e y son pares. Entonces x^2, y^2 y z^2 también lo son. Luego el
@@ -337,11 +340,11 @@ conjetura n = and [odd (numeroDePares t) | t <- pitagoricas n]
 -- Caso 3: x es impar e y es par. Análogo al caso 2.
 -- Caso 4: x e y son impares. Entonces x^2 e y^2 también son impares y z^2 es
 -- par. Luego el número de componentes pares es 1 impar.
-
--- 12 - Problema 9 del Proyecto Euler.
+--
+-- 2.12 - Problema 9 del Proyecto Euler.
 -- -----------------------------------------------------------------------------
-
--- 12.1 - Una terna pitagórica es una terna de números naturales (a,b,c) tal que
+--
+-- 2.12.1 - Una terna pitagórica es una terna de números naturales (a,b,c) tal que
 -- a < b < c y a^2 + b^2 = c^2. Por ejemplo (3,4,5) es una terna pitagórica.
 -- Definir la función
 --
@@ -353,15 +356,20 @@ conjetura n = and [odd (numeroDePares t) | t <- pitagoricas n]
 -- ternasPitagoricas 12 = [(3,4,5)]
 -- ternasPitagoricas 60 = [(10,24,26), (15,20,25)]
 
+ternasPitagoricas :: Integer -> [(Integer,Integer,Integer)]
+ternasPitagoricas x = [(a,b,c) | a <- [1..x],
+                                 b <- [a+1..x],
+                                 c <- [x-a-b],
+                                 a^2 + b^2 == c^2]
 
-
--- 12.2 - Definir la constante euler9 tal que euler9 es producto a*b*c donde
+-- 2.12.2 - Definir la constante euler9 tal que euler9 es producto a*b*c donde
 -- (a,b,c) es la única terna pitagórica tal que a + b + c = 1000. Calcular el
 -- valor euler9.
 
+euler9 = a*b*c
+    where (a,b,c) = head (ternasPitagoricas 1000)
 
-
--- 13 - Producto escalar
+-- 2.13 - Producto escalar
 -- -----------------------------------------------------------------------------
 -- El producto escalar de dos listas de enteros xs e ys de longitud n viene dado
 -- por la suma de los productos de los elementos correspondientes. Definir por
@@ -374,9 +382,10 @@ conjetura n = and [odd (numeroDePares t) | t <- pitagoricas n]
 --
 -- productoEscalar [1,2,3] [4,5,6] == 32
 
+productoEscalar :: [Int] -> [Int] -> Int
+productoEscalar xs ys = sum [x*y | (x,y) <- zip xs ys]
 
-
--- 14 - Suma de pares de elementos consecutivos.
+-- 2.14 - Suma de pares de elementos consecutivos.
 -- -----------------------------------------------------------------------------
 -- Definir por comprensión, la función
 --
@@ -388,9 +397,10 @@ conjetura n = and [odd (numeroDePares t) | t <- pitagoricas n]
 -- sumaConsecutivos [3,1,5,2] == [4,6,7]
 -- sumaConsecutivos [3] == []
 
+sumaConsecutivos :: [Int] -> [Int]
+sumaConsecutivos xs = [x+y | (x,y) <- zip xs (tail xs)]
 
-
--- 15 - Posiciones de un elemento en una lista.
+-- 2.15 - Posiciones de un elemento en una lista.
 -- -----------------------------------------------------------------------------
 -- En el tema se ha definido la función
 --
@@ -406,18 +416,24 @@ conjetura n = and [odd (numeroDePares t) | t <- pitagoricas n]
 -- posiciones2 :: a -> a -> [a] -> [int]
 --
 -- tal que posiciones 2 sea equivalente a posiciones
+-- La definición de posiciones es
 
--- Función (busca x ys) es la segunda componente del primer par de ys cuya
--- primera componente sea igual a x.
+posiciones :: Eq a => a -> [a] -> [Int]
+posiciones x xs =
+    [i | (x',i) <- zip xs [0..n], x == x']
+    where n = length xs - 1
 
+-- La definición de busca es
 
+busca :: Eq a => a -> [(a, b)] -> [b]
+busca c t = [v | (c', v) <- t, c' == c]
 
--- Modificamos la función busca para que retorne solamente la primera
--- coincidencia, si no todas las que encuentre.
+-- La redefinición de posiciones es
 
+posiciones' :: Eq a => a -> [a] -> [Int]
+posiciones' x xs = busca x (zip xs [0..])
 
-
--- 16 - Representación densa de un polinomio representado dispersamente.
+-- 2.16 - Representación densa de un polinomio representado dispersamente.
 -- -----------------------------------------------------------------------------
 -- Los polinomios pueden representarse de forma dispersa o densa. Por ejemplo,
 -- el polinomio 6x^4 - 5x^2 + 4x - 7 se puede representar de forma dispersa por
@@ -432,9 +448,11 @@ conjetura n = and [odd (numeroDePares t) | t <- pitagoricas n]
 -- densa [6,0,-5,4,-7] == [(4,6),(2,-5),(1,4),(0,-7)]
 -- densa [6,0,0,3,0,4] == [(5,6),(2,3),(0,4)]
 
+densa :: [Int] -> [(Int,Int)]
+densa xs = [(x,y) | (x,y) <- zip [n-1,n-2..0] xs, y /= 0]
+    where n = length xs
 
-
--- 17 - Producto cartesiano.
+-- 2.17 - Producto cartesiano.
 -- -----------------------------------------------------------------------------
 -- La función
 --
@@ -458,9 +476,10 @@ conjetura n = and [odd (numeroDePares t) | t <- pitagoricas n]
 -- Indicación: Utilizar la función concat y encajar una lista por compresión
 -- dentro de la otra.
 
+pares' :: [a] -> [b] -> [(a,b)]
+pares' xs ys = concat [[(x,y) | y <- ys] | x <- xs]
 
-
--- 18 - Consulta de bases de datos.
+-- 2.18 - Consulta de bases de datos.
 -- -----------------------------------------------------------------------------
 -- Las bases de datos sobre actividades de personas pueden representarse
 -- mediante listas de elementos de la forma (a,b,c,d), donde a es el nombre de
@@ -481,42 +500,49 @@ conjetura n = and [odd (numeroDePares t) | t <- pitagoricas n]
 --			   ("Botticelli", "Pintura", 1445, 1510),
 --			   ("Borromini", "Arquitectura", 1599, 1667),
 --			   ("Bach", "musica", 1685, 1750)]
-
--- 18.1 - Definir la función nombres tal que (nombres bd) es la lista de los
+--
+-- 2.18.1 - Definir la función nombres tal que (nombres bd) es la lista de los
 -- nombres de las personas de la base de datos bd. Por ejemplo,
 --
 -- nombres personas == ["Cervantes", "Velazquez", "Picasso", "Beethoven",
 -- "Poincare", "Quevedo", "Goya", "Einstein", "Mozart", "Botticelli",
 -- "Borromini", "Bach"]
 
+nombres :: [(String,String,Int,Int)] -> [String]
+nombres bd = [x | (x,_,_,_) <- bd]
 
-
--- 18.2 Definir la función musicos tal que (musicos bd) es la lista de los
+-- 2.18.2 - Definir la función musicos tal que (musicos bd) es la lista de los
 -- nombres de los músicos de la base de datos bd. Por ejemplo,
 --
 -- musicos personas == ["Beethoven", "Mozart", "Bach"]
 
+musicos :: [(String,String,Int,Int)] -> [String]
+musicos bd = [x | (x,m,_,_) <- bd, m == "Musica"]
 
-
--- 18.3 - Definir la función selección tal que (seleccion bd m) es la lista de
+-- 2.18.3 - Definir la función selección tal que (seleccion bd m) es la lista de
 -- los nombres de las personas de la base de datos bd cuya actividad es m. Por
 -- ejemplo,
 --
 -- selección personas "Pintura" == ["Velazquez", "Picasso", "Goya",
 -- 								    "Botticelli"]
 
+seleccion :: [(String,String,Int,Int)] -> String -> [String]
+seleccion bd m = [ x | (x,m',_,_) <- bd, m == m' ]
 
-
--- 18.4 - Definir, usando el apartado anterior, la función musicos2 tal que
+-- 2.18.4 - Definir, usando el apartado anterior, la función musicos2 tal que
 -- (musicos2 bd) es la lista de los nombres de los músicos de la base de datos
 -- bd. Por ejemplo,
 --
 -- musicos2 personas == ["Beethoven", "Mozart", "Bach"]
 
+musicos' :: [(String,String,Int,Int)] -> [String]
+musicos' bd = seleccion bd "Musica"
 
-
--- 18.5 - Definir la función vivas tal que (vivas bd a) es la lista de los
+-- 2.18.5 - Definir la función vivas tal que (vivas bd a) es la lista de los
 -- nombres de las personas de la base de datos bd que estaban vivas en el año
 -- a. Por ejemplo,
 --
 -- vivas personas 1600 == ["Cervantes", "Velazquez", "Quevedo", "Borromini"]
+
+vivas :: [(String,String,Int,Int)] -> Int -> [String]
+vivas ps a = [x | (x,_,a1,a2) <- ps, a1 <= a, a <= a2]
