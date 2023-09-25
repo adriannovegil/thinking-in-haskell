@@ -747,3 +747,454 @@ prop_mitadPares xs =
 --
 -- ghci> quickCheck prop_mitadPares
 -- +++ OK, passed 100 tests.
+--
+-- 4.11 - Pertenencia a un rango
+-- 4.11.1 - Definir, por comprensión, la función
+--
+-- enRangoC :: Int -> Int -> [Int] -> [Int]
+--
+-- tal que (enRangoC a b xs) es la lista de los elementos de xs mayores o 
+-- iguales que a y menores o iguales que b. Por ejemplo,
+--
+-- enRangoC 5 10 [1..15] == [5,6,7,8,9,10]
+-- enRangoC 10 5 [1..15] == []
+-- enRangoC 5 5 [1..15] == [5]
+
+enRangoC :: Int -> Int -> [Int] -> [Int]
+enRangoC a b xs = [x | x <- xs, a <= x, x <= b]
+
+-- 4.11.2 - Definir, por recursión, la función
+--
+-- enRangoR :: Int -> Int -> [Int] -> [Int]
+--
+-- tal que (enRangoR a b xs) es la lista de los elementos de xs mayores o 
+-- iguales que a y menores o iguales que b. Por ejemplo,
+--
+-- enRangoR 5 10 [1..15] == [5,6,7,8,9,10]
+-- enRangoR 10 5 [1..15] == []
+-- enRangoR 5 5 [1..15]  == [5]
+
+enRangoR :: Int -> Int -> [Int] -> [Int]
+enRangoR a b [] = []
+enRangoR a b (x:xs)
+    | a <= x && x <= b = x : enRangoR a b xs
+    | otherwise = enRangoR a b xs
+
+-- 4.11.3 - Comprobar con QuickCheck que ambas definiciones son equivalentes.
+
+prop_enRango :: Int -> Int -> [Int] -> Bool
+prop_enRango a b xs =
+    enRangoC a b xs == enRangoR a b xs
+
+-- La comrpobación es
+--
+-- ghci> quickCheck prop_enRango
+-- +++ OK, passed 100 tests.
+--
+-- 4.12 - Suma de elementos positivos
+-- 4.12.1 - Definir, por comprensión, la función
+--
+-- sumaPositivosC :: [Int] -> Int
+--
+-- tal que (sumaPositivosC xs) es la suma de los números positivos de xs. Por 
+-- ejemplo,
+-- 
+-- sumaPositivosC [0,1,-3,-2,8,-1,6] == 15
+
+sumaPositivosC :: [Int] -> Int
+sumaPositivosC xs = sum [x | x <- xs, x > 0]
+
+-- 4.12.2 - Definir, por recursión, la función
+--
+-- sumaPositivosR :: [Int] -> Int
+--
+-- tal que (sumaPositivosR xs) es la suma de los números positivos de xs. Por ejemplo,
+--
+-- sumaPositivosR [0,1,-3,-2,8,-1,6] == 15
+
+sumaPositivosR :: [Int] -> Int
+sumaPositivosR [] = 0
+sumaPositivosR (x:xs) | x > 0 = x + sumaPositivosR xs
+                      | otherwise = sumaPositivosR xs
+
+-- 4.12.3 - Comprobar con QuickCheck que ambas definiciones son equivalentes.
+
+prop_sumaPositivos :: [Int] -> Bool
+prop_sumaPositivos xs =
+    sumaPositivosC xs == sumaPositivosR xs
+
+-- La comrpobación es
+--
+-- ghci> quickCheck prop_sumaPositivos
+-- +++ OK, passed 100 tests.
+--
+-- 4.13 - Aproximación del número pi
+--
+-- La suma de la serie
+--
+--      1     1     1     1
+--     --- + --- + --- + --- + ...
+--     1^2   2^2   3^2   4^2
+--
+-- es pi²/6. Por tanto, Pi se puede aproximar mediante la raíz cuadrada de 6 
+-- por la suma de la serie.
+--
+-- 4.13.1 - Definir, por comprensión, la función aproximaPiC tal que (
+-- aproximaPiC n) es la aproximación de pPi obtenida mediante n términos de la 
+-- serie. Por ejemplo,
+--
+-- aproximaPiC 4 == sqrt(6*(1/1^2 + 1/2^2 + 1/3^2 + 1/4^2))
+--               == 2.9226129861250305
+-- aproximaPiC 1000 == 3.1406380562059946
+
+aproximaPiC n = sqrt(6*sum [1/x^2 | x <- [1..n]])
+
+-- 4.13.2 - Definir, por comprensión, la función aproximaPiR tal que (
+-- aproximaPiR n) es la aproximación de Pi obtenida mediante n términos 
+-- de la serie. Por ejemplo,
+--
+-- aproximaPiR 4 == sqrt(6*(1/1^2 + 1/2^2 + 1/3^2 + 1/4^2))
+--               == 2.9226129861250305
+-- aproximaPiR 1000 == 3.1406380562059946
+
+aproximaPiR n = sqrt(6*aproximaPiR' n)
+aproximaPiR' 1 = 1
+aproximaPiR' n = 1/n^2 + aproximaPiR' (n-1)
+
+-- 4.14 - Sustitución de impares por el siguiente par
+-- 4.14.1 - Definir, por recursión, la función
+--
+-- sustituyeImpar :: [Int] -> [Int]
+--
+-- tal que (sustituyeImpar xs) es la lista obtenida sustituyendo cada número 
+-- impar de xs por el siguiente número par. Por ejemplo,
+--
+-- sustituyeImpar [2,5,7,4] == [2,6,8,4]
+
+sustituyeImpar :: [Int] -> [Int]
+sustituyeImpar []     = []
+sustituyeImpar (x:xs) | odd x     = (x+1): sustituyeImpar xs
+                      | otherwise = x:sustituyeImpar xs
+
+-- 4.14.2 - Comprobar con QuickCheck la siguient propiedad: para cualquier 
+-- lista de número enteros xs, todos los elementos de la lista (sustituyeImpar
+--  xs) son número pares.
+
+prop_sustituyeImpar :: [Int] -> Bool
+prop_sustituyeImpar xs = and [even x | x <- sustituyeImpar xs]
+
+-- La comrpobación es
+--
+-- ghci> quickCheck prop_sustituyeImpar
+-- +++ OK, passed 100 tests.
+--
+-- 4.15 - La compra de una persona agarrada
+-- 4.15.1 - Una persona es tan agarrada que sólo compra cuando le hacen un 
+-- descuento del 10% y el precio (con el descuento) es menor o igual que 199.
+-- Definir, usando comprensión, la función
+--
+-- agarradoC :: [Float] -> Float
+--
+-- talq ue (agarradoC ps) es el precio que tiene que pagar por una compra cuya 
+-- lista de precios es ps. Por ejemplo,
+--
+-- agarradoC [45.00, 199.00, 220.00, 399.00] == 417.59998
+
+agarradoC :: [Float] -> Float
+agarradoC ps = sum [p * 0.9 | p <- ps, p * 0.9 <= 199]
+
+-- 4.15.2 - Definir, por recursión, la función
+--
+-- agarradoR :: [Float] -> Float
+--
+-- tal que (agarradoR ps) es el precio que tiene que pagar por una compra cuya 
+-- lista de precios es ps. Por ejemplo,
+--
+-- agarradoR [45.00, 199.00, 220.00, 399.00] == 417.59998
+
+agarradoR :: [Float] -> Float
+agarradoR [] = 0
+agarradoR (p:ps)
+    | precioConDescuento <= 199 = precioConDescuento + agarradoR ps
+    | otherwise                 = agarradoR ps
+    where precioConDescuento    = p * 0.9
+
+-- 4.15.3 - Comprobar con QuickCheck que ambas definiciones son similares; es 
+-- decir, el valor obsoluto de su diferencia es menor que una décima.
+
+prop_agarrado :: [Float] -> Bool
+prop_agarrado xs = abs (agarradoR xs - agarradoC xs) <= 0.1
+
+-- La comrpobación es
+--
+-- ghci> quickCheck prop_agarrado
+-- +++ OK, passed 100 tests.
+--
+-- 4.16 - Descomposición en productos de factores primos
+-- 4.16.1 - Lista de los factores primos de un número
+-- Definir la función
+--
+-- factores :: Integer -> Integer
+--
+-- tal que (factores n) es la lista de los factores de n. Por ejemplo,
+--
+-- factores 60 == [1,2,3,4,5,6,10,12,15,20,30,60]
+
+factores :: Integer -> [Integer]
+factores n = [x | x <- [1..n], mod n x == 0]
+
+-- 4.16.2 - Decidir si un número es primo
+-- Definir la función
+--
+-- primo :: Integer -> Bool
+--
+-- tal que (primo n) se verifica si n es primo. Por ejemplo,
+--
+-- primo 7 == True
+-- primo 9 == False
+
+primo :: Integer -> Bool
+primo x = factores x == [1,x]
+
+-- 4.16.3 - Factorización de un número
+-- Definir la función
+--
+-- factoresPrimos :: Integer -> [Integer]
+--
+-- tal que (factoresPrimos n) es la lista de los factores primos de n. Por ejemplo,
+--
+-- factoresPrimos 60 == [2,3,5]
+
+factoresPrimos :: Integer -> [Integer]
+factoresPrimos n = [x | x <- factores n, primo x]
+
+-- 4.16.4 - Exponente de la mayor potencia de un número que divide a otro
+-- 4.16.4.1 - Definir, por recursión, la función
+--
+-- mayorExponenteR :: Integer -> Integer -> Integer
+--
+-- tal que (mayorExponenteR a b) es el exponente de la mayor potencia de a que 
+-- divide a b. Por ejemplo,
+-- 
+-- mayorExponenteR 2 8   == 3
+-- mayorExponenteR 2 9   == 0
+-- mayorExponenteR 5 100 == 2
+-- mayorExponenteR 2 60  == 2
+
+mayorExponenteR :: Integer -> Integer -> Integer
+mayorExponenteR a b
+    | mod b a /= 0 = 0
+    | otherwise    = 1 + mayorExponenteR a (b `div` a)
+
+-- 4.16.4.2 - Definir, por comprensión, la función
+--
+-- mayorExponenteC :: Integer -> Integer -> Integer
+--
+-- tal que (mayorExponenteC a b) es el exponente de la mayor potencia de a que 
+-- divide a b. Por ejemplo,
+-- 
+-- mayorExponenteC 2 8 == 3
+-- mayorExponenteC 5 100 == 2
+-- mayorExponenteC 5 101 == 0
+
+mayorExponenteC :: Integer -> Integer -> Integer
+mayorExponenteC a b = head [x-1 | x <- [0..], mod b (a^x) /= 0]
+
+-- 4.16.4.3 - Definir la función
+--
+-- factorizacion :: Integer -> [(Integer,Integer)]
+--
+-- tal que (factorización n) es la factorización de n. Por ejemplo,
+--
+-- factorizacion 60 == [(2,2),(3,1),(5,1)]
+
+factorizacion :: Integer -> [(Integer,Integer)]
+factorizacion n = [(x,mayorExponenteR x n) | x <- factoresPrimos n]
+
+-- 4.16.5 - Expansión de la factorización de un número
+-- 4.16.5.1 - Definir, por recursión, la función
+--
+-- expansionR :: [(Integer,Integer)] -> Integer
+--
+-- tal que (expansonR xs) es la expansión de la factorización de xs. Por ejemplo,
+--
+-- expansionR [(2,2),(3,1),(5,1)] == 60
+
+expansionR :: [(Integer,Integer)] -> Integer
+expansionR []         = 1
+expansionR ((x,y):zs) = x^y * expansionR zs
+
+-- 4.16.5.2 - Definir, por comprensión, la función
+-- 
+-- expansionC :: [(Integer,Integer)] -> Integer
+--
+-- tal que (expansionC xs) es la expansión de la factorización de xs. Por 
+-- ejemplo,
+--
+-- expansionC [(2,2),(3,1),(5,1)] == 60
+
+expansionC :: [(Integer,Integer)] -> Integer
+expansionC xs = product [x^y | (x,y) <- xs]
+
+-- 4.16.5.3 - Comprobar con QuickCheck que ambas definiciones son similares
+--
+-- prop_factorizacion :: Integer -> Bool
+-- 
+-- tal que (prop_factorizaion n) se verifica si para todo número natural x, 
+-- menor o igual que n, se tiene que (expansionC (factorizacion x)) es igual a 
+-- x. Por ejemplo,
+
+prop_factorizacion n =
+    and [expansionC (factorizacion x) == x | x <- [1..n]]
+
+-- La comrpobación es
+--
+-- ghci> quickCheck prop_factorizacion
+-- +++ OK, passed 100 tests.
+--
+-- 4.17 - Menor número con todos los dígitos en la factorización de su 
+-- factorial
+-- El enunciado del problema 652 de "Números y algo más" es el siguiente:
+--
+-- Si factorizamos los factoriales de un número en función de sus divisores 
+-- primos y sus potencias, ¿cuál es el menor número n tal que entre los 
+-- factores primos y los exponentes de la factorización de n! están todos los
+-- dígitos del cero al nueve? Por ejemplo,
+--
+-- * 6! = 2^4 3^2 5^1, le faltan los dígitos 0,6,7,8 y 9
+-- * 12! = 2^10 3^5 5^2 7^1 11^1, le faltan los dígitos 4,6,8 y 9
+--
+-- Definir la función
+--
+-- digitosDEFactorizacion :: Integer -> [Integer]
+--
+-- tal que (digitosDeFactorizacion n) es el conjunto de los dígitos que 
+-- aparecen en la factorización de n. Por ejemplo,
+--
+-- digitosDeFactorizacion (factorial 6) == [1,2,3,4,5]
+-- digitosDeFactorizacion (factorial 12) == [0,1,2,3,5,7]
+--
+-- Usando la función anterior, calcular la solución del problema.
+
+digitosDeFactorizacion652 :: Integer -> [Integer]
+digitosDeFactorizacion652 n =
+    sort (nub (concat [digitos652 x | x <- numerosDeFactorizacion652 n]))
+
+-- donde se usan las siguientes funciones auxiliares
+--
+-- (digitos n) es la lista de los dígitos del número n. Por ejemplo,
+--
+-- digitos 320274 == [3,2,0,2,7,4]
+
+digitos652 :: Integer -> [Integer]
+digitos652 n = [read [x] | x <- show n]
+
+-- (numerosDeFactorizacion n) es el conjunto de los números en la factorización
+-- de n. Por ejemplo,
+--
+-- numerosDeFactorizacion 60 == [1,2,3,5]
+
+numerosDeFactorizacion652 :: Integer -> [Integer]
+numerosDeFactorizacion652 n =
+    sort (nub (aux (factorizacion652 n)))
+    where aux [] = []
+          aux ((x,y):zs) = x : y : aux zs
+
+-- (factorizacion n) es la factorization de n. Por ejemplo,
+--
+-- factorizacion 300 == [(2,2),(3,1),(5,2)]
+
+factorizacion652 :: Integer -> [(Integer,Integer)]
+factorizacion652 n =
+    [(head xs, fromIntegral (length xs)) | xs <- group (factorizacion652' n)]
+
+-- (factorizacion' n) es la lista de todos los factores primos de n; es decir, 
+-- es una lista de números primos cuyo producto es n. Por ejemplo,
+--
+-- factorizacion 300 == [2,2,3,5,5]
+
+factorizacion652' :: Integer -> [Integer]
+factorizacion652' n | n == 1 = []
+                 | otherwise = x : factorizacion652' (div n x)
+                 where x = menorFactor652 n
+
+-- (menorFactor n) es el menor factor primo de n. Por ejemplo,
+--
+-- menorFactor 15 == 3
+
+menorFactor652 :: Integer -> Integer
+menorFactor652 n = head [x | x <- [2..], rem n x == 0]
+
+-- (factorial n) es el factorial de n. Por ejemplo,
+--
+-- factorial 5 == 120
+
+factorial652 :: Integer -> Integer
+factorial652 n = product [1..n]
+
+-- Para calcular la solución, se define la constante
+
+solucion =
+    head [n | n <- [1..], digitosDeFactorizacion652 (factorial652 n) == [0..9]]
+
+-- El cálculo de la solución es
+--
+-- ghci> solucion
+-- 49
+--
+-- 4.18 - Suma de números especiales
+-- Los siguientes ejercicios están basados en el problema 357 del proyecto Euler
+-- 4.18.1 - Un número natual n es especial si para todo divisor d de n, d + n/d es primo.
+-- Definir la función
+--
+-- especial :: Integer -> Bool
+--
+-- tal que (especial x) se verifica si x es especial. Por ejemplo,
+-- especial 30 == True
+-- especial 20 == False
+
+especial357 :: Integer -> Bool
+especial357 x = and [esPrimo357 (d + x `div` d) | d <- divisores357 x]
+
+-- donde se usan las siguientes funciones auxiliares
+--
+-- (divisores x) es la lista de los divisores de x. Por ejemplo,
+--
+-- divisores 30 == [1,2,3,5,6,10,15,30]
+
+divisores357 :: Integer -> [Integer]
+divisores357 x = [d | d <- [1..x], x `rem` d == 0]
+
+-- (esPrimo x) se verifica si x es primo. Por ejemplo,
+--
+-- esPrimo 7 == True
+-- esPrimo 8 == False
+
+esPrimo357 :: Integer -> Bool
+esPrimo357 x = divisores357 x == [1,x]
+
+-- 4.18.2 - Definir, por comprensión, la función
+--
+-- sumaEspeciales :: Integer -> Integer
+--
+-- tal que (sumaEspeciales n) es la suma de los números especiales menores o 
+-- iguales que n. Por ejemplo,
+-- 
+-- sumaEspeciales 100 == 401
+
+sumaEspeciales :: Integer -> Integer
+sumaEspeciales n = sum [x | x <- [1..n], especial357 x]
+
+-- 4.18.3 - Defirni, por recursión, la función
+--
+-- sumaEspecialesR :: Integer -> Integer
+--
+-- tal que, (sumaEspecialesR n) es la suma de los números especiales menores o 
+-- iguales que n. Por ejemplo,
+--
+-- sumaEspecialesR 100 == 401
+
+sumaEspecialesR :: Integer -> Integer
+sumaEspecialesR 0 = 0
+sumaEspecialesR n | especial357 n = n + sumaEspecialesR (n-1)
+                  | otherwise  = sumaEspecialesR (n-1)
