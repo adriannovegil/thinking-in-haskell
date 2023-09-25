@@ -525,3 +525,225 @@ especial x =
 -- El cálculo es
 -- ghci> head [x | x <- [72577..], especial x]
 -- 406512
+
+-- 4.5 - Cuadrados de los elementos de una lista
+-- 4.5.1 - Definir, por comprensión, la función
+--
+-- cuadradosC :: [Integer] -> [Integer]
+--
+-- tal que (cuadradosC xs) es la lista de los cuadrados de xs. Por ejemplo,
+-- 
+-- cuadradosC [1,2,3] == [1,4,9]
+
+cuadradosC :: [Integer] -> [Integer]
+cuadradosC xs = [x*x | x <- xs]
+
+-- 4.5.2 - Definir, por recursión, la función
+--
+-- cuadradosR :: [Integer] -> [Integer]
+--
+-- tal que (cuadradosR xs) es la lista de los cuadrados de xs. Por ejemplo,
+--
+-- cuadradosR [1,2,3] == [1,4,9]
+
+cuadradosR :: [Integer] -> [Integer]
+cuadradosR []     = []
+cuadradosR (x:xs) = x*x : cuadradosR xs
+
+-- 4.5.3 - Comprobar con QuickCheck que ambas definiciones son equivalentes.
+
+prop_cuadrados :: [Integer] -> Bool
+prop_cuadrados xs =
+    cuadradosC xs == cuadradosR xs
+
+-- La comrpobación es
+--
+-- ghci> quickCheck prop_cuadrados
+-- +++ OK, passed 100 tests.
+--
+-- 4.6 - Números impares de una lista
+-- 4.6.1 - Definir, por comprensión, la función
+--
+-- imparesC :: [Integer] -> [Integer]
+--
+-- tal que (imparesC xs) es la lista de los números impares de xs. Por ejemplo,
+--
+-- imparesC [1,2,4,3,6] == [1,3]
+
+imparesC :: [Integer] -> [Integer]
+imparesC xs = [x | x <- xs, odd x]
+
+-- 4.6.2 - Definir, por recursión, la función
+--
+-- imparesR :: [Integer] -> [Integer]
+--
+-- tal que (imparesR xs) es la lista de los números impares de xs. Por ejemplo,
+--
+-- imparesC [1,2,4,3,6] == [1,3]
+
+imparesR :: [Integer] -> [Integer]
+imparesR [] = []
+imparesR (x:xs) | odd x = x : imparesR xs
+                | otherwise = imparesR xs
+
+-- 4.6.3 - Comprobar con QuichCheck que ambas definiciones son equivalentes.
+
+prop_impares :: [Integer] -> Bool
+prop_impares xs =
+    imparesC xs == imparesR xs
+
+-- La comrpobación es
+--
+-- ghci> quickCheck prop_impares
+-- +++ OK, passed 100 tests.
+--
+-- 4.7 - Cuadrados de los elementos impares
+-- 4.7.1 - Definir, por comprensión, la función
+--
+-- imparesCuadradosC :: [Integer] -> [Integer]
+--
+-- tal que (imparesCuadradosC xs) es la lista de los cuadrados de los números 
+-- impares de xs. Por ejemplo, 
+--
+--  imparesCuadradosC [1,2,4,3,6] == [1,9]
+
+imparesCuadradosC :: [Integer] -> [Integer]
+imparesCuadradosC xs = [x*x | x <- xs, odd x]
+
+-- 4.7.2 - Definir, por recursión, la función
+--
+-- imparesCuadradosR :: [Integer] -> [Integer]
+--
+-- tal que (imparesCuadradosR xs) es la lista de los cuadrados de los números 
+-- impares de xs. POr ejemplo,
+--
+--  imparesCuadradosR [1,2,4,3,6] == [1,9]
+
+imparesCuadradosR :: [Integer] -> [Integer]
+imparesCuadradosR [] = []
+imparesCuadradosR (x:xs) | odd x = x*x : imparesCuadradosR xs
+                         | otherwise = imparesCuadradosR xs
+
+-- 4.7.3 - Comprobar con QuickCheck que ambas definiciones son equivalentes.
+
+prop_imparesCuadrados :: [Integer] -> Bool
+prop_imparesCuadrados xs =
+    imparesCuadradosC xs == imparesCuadradosR xs
+
+-- La comrpobación es
+--
+-- ghci> quickCheck prop_imparesCuadrados
+-- +++ OK, passed 100 tests.
+--
+-- 4.8 - Suma de los cuadrados de los elementos impares
+-- 4.8.1 - Definir, por comprensión, la función
+--
+-- sumaCuadradosImparesC'' :: [Integer] -> Integer
+--
+-- tal que (sumaCuadradosImparesC'' xs) es la suma de los cuadrados de los 
+-- números impares de la lista xs. Por ejemplo,
+--
+-- sumaCuadradosImparesC'' [1,2,4,3,6] == 10
+
+sumaCuadradosImparesC'' :: [Integer] -> Integer
+sumaCuadradosImparesC'' xs = sum [ x*x | x <- xs, odd x ]
+
+-- 4.8.2 - Definir, por recursión, la función
+--
+-- sumaCuadradosImparesR :: [Integer] -> Integer
+--
+-- tal que (sumaCuadradosImparesR xs) es la suma de los cuadrados de los 
+-- números impares de la lista xs. Por ejemplo,
+--
+-- sumaCuadradosImparesR [1,2,4,3,6] == 10
+
+sumaCuadradosImparesR'' :: [Integer] -> Integer
+sumaCuadradosImparesR'' [] = 0
+sumaCuadradosImparesR'' (x:xs)
+    | odd x = x*x + sumaCuadradosImparesR'' xs
+    | otherwise = sumaCuadradosImparesR'' xs
+
+-- 4.8.3 - Comprobar con QuichCheck que amabas definiciones son equivalentes.
+
+prop_sumaCuadradosImpares :: [Integer] -> Bool
+prop_sumaCuadradosImpares xs =
+    sumaCuadradosImparesC'' xs == sumaCuadradosImparesR'' xs
+
+-- La comrpobación es
+--
+-- ghci> quickCheck prop_sumaCuadradosImpares
+-- +++ OK, passed 100 tests.
+--
+-- 4.9 - Intervalo numérico
+-- 4.9.1 - Definir, usando funciones predefinidas, la función
+--
+-- entreL :: Integer -> Integer -> [Integer]
+--
+-- tal que (entreL m n) es la lista de los números entre m y n. Por ejemplo,
+-- 
+-- entreL 2 5 == [2,3,4,5]
+
+entreL :: Integer -> Integer -> [Integer]
+entreL m n = [m..n]
+
+-- 4.9.2 - Definir por recursión, la función
+--
+-- entreR :: Integer -> Integer -> [Integer]
+--
+-- tal que (entreR m n) es la lista de los número entre m y n. Por ejemplo,
+-- 
+-- entreR 2 5 == [2,3,4,5]
+
+entreR :: Integer -> Integer -> [Integer]
+entreR m n | m > n = []
+           | otherwise = m : entreR (m+1) n
+
+-- 4.9.3 - Comrpobar con QuickCheck que amabas definiciones son equivalentes.
+
+prop_entre :: Integer -> Integer -> Bool
+prop_entre m n =
+    entreL m n == entreR m n
+
+-- La comrpobación es
+--
+-- ghci> quickCheck prop_entre
+-- +++ OK, passed 100 tests.
+--
+-- 4.10 - Mirades de los pares
+-- 4.10.1 - Definir, por comprensión, la función
+--
+-- mitadParesC :: [Int] -> [Int]
+--
+-- tal que (mitadParesC xs) es la lista de las mitades de los elementos de xs 
+-- que son pares. Por ejemplo,
+--
+-- mitadParesC [0,2,1,7,8,56,17,18] == [0,1,4,28,9]
+
+mitadParesC :: [Int] -> [Int]
+mitadParesC xs = [x `div` 2 | x <- xs, x `mod` 2 == 0]
+
+-- 4.10.2 - Definir, por recursión, la función
+--
+-- mitadParesR :: [Int] -> [Int]
+--
+-- tal que (mitadParesR xs) es la lista de las mitades de los elementos de xs 
+-- que son pares. Por ejemplo,
+--
+-- mitadParesR [0,2,1,7,8,56,17,18] == [0,1,4,28,9]
+
+mitadParesR :: [Int] -> [Int]
+mitadParesR [] = []
+mitadParesR (x:xs)
+    | even x    = x `div` 2 : mitadParesR xs
+    | otherwise = mitadParesR xs
+
+-- 4.10.3 - Comprobar con QuickCheck que ambas definiciones son equivalentes.
+
+prop_mitadPares :: [Int] -> Bool
+prop_mitadPares xs =
+    mitadParesC xs == mitadParesR xs
+
+-- La comrpobación es
+--
+-- ghci> quickCheck prop_mitadPares
+-- +++ OK, passed 100 tests.
