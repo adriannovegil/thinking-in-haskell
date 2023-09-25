@@ -1198,3 +1198,93 @@ sumaEspecialesR :: Integer -> Integer
 sumaEspecialesR 0 = 0
 sumaEspecialesR n | especial357 n = n + sumaEspecialesR (n-1)
                   | otherwise  = sumaEspecialesR (n-1)
+
+-- 4.19 - Distancia de Hamming
+-- La distancia de Hamming entre dos listas es el número de posiciones en que
+-- los correspondientes elementos son distintos. Por ejemplo, la distancia de
+-- Hamming entre "roma" y "loba" es 2 (porque hay 2 posiciones en las que los
+-- elementos correspondientes son distintos: la 1ª y la 3ª).
+-- 4.19.1 - Definir, por comprensión, la función
+--
+-- distanciaC :: Eq a => [a] -> [a] -> Int
+--
+-- tal que (distanciaC xs ys) es la distanciaC de Hamming entre xs e ys. Por 
+-- ejemplo,
+--
+-- distanciaC "romano" "comino" == 2
+-- distanciaC "romano" "camino" == 3
+-- distanciaC "roma" "comino" == 2
+-- distanciaC "roma" "camino" == 3
+-- distanciaC "romano" "ron" == 1
+-- distanciaC "romano" "cama" == 2
+-- distanciaC "romano" "rama" == 1
+
+distanciaC :: Eq a => [a] -> [a] -> Int
+distanciaC xs ys = length [(x,y) | (x,y) <- zip xs ys, x /= y]
+
+-- 4.19.2 - Definir, por recursión, la función
+--
+-- distanciaR :: Eq a => [a] -> [a] -> Int
+--
+-- tal que (distanciaR xs ys) es la distanciaR de Hamming entre xs e ys. Por 
+-- ejemplo,
+--
+-- distanciaR "romano" "comino" == 2
+-- distanciaR "romano" "camino" == 3
+-- distanciaR "roma" "comino" == 2
+-- distanciaR "roma" "camino" == 3
+-- distanciaR "romano" "ron" == 1
+-- distanciaR "romano" "cama" == 2
+-- distanciaR "romano" "rama" == 1
+
+distanciaR :: Eq a => [a] -> [a] -> Int
+distanciaR [] ys = 0
+distanciaR xs [] = 0
+distanciaR (x:xs) (y:ys) | x /= y = 1 + distanciaR xs ys
+                         | otherwise = distanciaR xs ys
+
+-- 4.19.3 - Comprobar con QuickCheck que ambas definiciones son equivalentes.
+
+prop_distancia :: [Int] -> [Int] -> Bool
+prop_distancia xs ys =
+    distanciaC xs ys == distanciaR xs ys
+
+-- La comrpobación es
+--
+-- ghci> quickCheck prop_distancia
+-- +++ OK, passed 100 tests.
+--
+-- 4.20 - Traspuesta de una matriz
+-- Definir la función
+-- 
+-- traspuesta :: [[a]] -> [[a]]
+--
+-- tal que (traspuesta m) es la traspuesta de la matriz m. Por ejemplo,
+--
+-- traspuesta [[1,2,3],[4,5,6]]   == [[1,4],[2,5],[3,6]]
+-- traspuesta [[1,4],[2,5],[3,6]] == [[1,2,3],[4,5,6]]
+
+traspuesta :: [[a]] -> [[a]]
+traspuesta []           = []
+traspuesta ([]:xss)     = traspuesta xss
+traspuesta ((x:xs):xss) =
+    (x:[h | (h:_) <- xss]) : traspuesta (xs : [t | (_:t) <- xss])
+
+-- 4.21 - Números expresables como sumas acotadas de elementos de una lista
+-- Definir la función
+--
+-- sumas :: Int -> [Int] -> [Int]
+--
+-- tal que (sumas n xs) es la lista de los números que se pueden obtener como 
+-- suma de n, o menos, elementos de xs. Por ejemplo,
+--
+-- sumas 0 [2,5]   == [0]
+-- sumas 1 [2,5]   == [2,5,0]
+-- sumas 2 [2,5]   == [4,7,2,10,5,0]
+-- sumas 3 [2,5]   == [6,9,4,12,7,2,15,10,5,0]
+-- sumas 2 [2,3,5] == [4,5,7,2,6,8,3,10,5,0]
+
+sumas :: Int -> [Int] -> [Int]
+sumas 0 _      = [0]
+sumas _ []     = [0]
+sumas n (x:xs) = [x+y | y <- sumas (n-1) (x:xs)] ++ sumas n xs
