@@ -144,6 +144,7 @@ sumaCuadradosImparesC' :: Integer -> Integer
 sumaCuadradosImparesC' n = sum [x^2 | x <- [1,3..n]]
 
 -- 4.4 - Operaciones con los dígitos de los núnermos
+-- -----------------------------------------------------------------------------
 -- 4.4.1 - Lista de los dígitos de un número
 -- 4.4.1.1 - Definir, por recursión, la función
 -- 
@@ -527,6 +528,7 @@ especial x =
 -- 406512
 
 -- 4.5 - Cuadrados de los elementos de una lista
+-- -----------------------------------------------------------------------------
 -- 4.5.1 - Definir, por comprensión, la función
 --
 -- cuadradosC :: [Integer] -> [Integer]
@@ -562,6 +564,7 @@ prop_cuadrados xs =
 -- +++ OK, passed 100 tests.
 --
 -- 4.6 - Números impares de una lista
+-- -----------------------------------------------------------------------------
 -- 4.6.1 - Definir, por comprensión, la función
 --
 -- imparesC :: [Integer] -> [Integer]
@@ -598,6 +601,7 @@ prop_impares xs =
 -- +++ OK, passed 100 tests.
 --
 -- 4.7 - Cuadrados de los elementos impares
+-- -----------------------------------------------------------------------------
 -- 4.7.1 - Definir, por comprensión, la función
 --
 -- imparesCuadradosC :: [Integer] -> [Integer]
@@ -636,6 +640,7 @@ prop_imparesCuadrados xs =
 -- +++ OK, passed 100 tests.
 --
 -- 4.8 - Suma de los cuadrados de los elementos impares
+-- -----------------------------------------------------------------------------
 -- 4.8.1 - Definir, por comprensión, la función
 --
 -- sumaCuadradosImparesC'' :: [Integer] -> Integer
@@ -675,6 +680,7 @@ prop_sumaCuadradosImpares xs =
 -- +++ OK, passed 100 tests.
 --
 -- 4.9 - Intervalo numérico
+-- -----------------------------------------------------------------------------
 -- 4.9.1 - Definir, usando funciones predefinidas, la función
 --
 -- entreL :: Integer -> Integer -> [Integer]
@@ -710,6 +716,7 @@ prop_entre m n =
 -- +++ OK, passed 100 tests.
 --
 -- 4.10 - Mirades de los pares
+-- -----------------------------------------------------------------------------
 -- 4.10.1 - Definir, por comprensión, la función
 --
 -- mitadParesC :: [Int] -> [Int]
@@ -749,6 +756,7 @@ prop_mitadPares xs =
 -- +++ OK, passed 100 tests.
 --
 -- 4.11 - Pertenencia a un rango
+-- -----------------------------------------------------------------------------
 -- 4.11.1 - Definir, por comprensión, la función
 --
 -- enRangoC :: Int -> Int -> [Int] -> [Int]
@@ -792,6 +800,7 @@ prop_enRango a b xs =
 -- +++ OK, passed 100 tests.
 --
 -- 4.12 - Suma de elementos positivos
+-- -----------------------------------------------------------------------------
 -- 4.12.1 - Definir, por comprensión, la función
 --
 -- sumaPositivosC :: [Int] -> Int
@@ -829,6 +838,7 @@ prop_sumaPositivos xs =
 -- +++ OK, passed 100 tests.
 --
 -- 4.13 - Aproximación del número pi
+-- -----------------------------------------------------------------------------
 --
 -- La suma de la serie
 --
@@ -862,6 +872,7 @@ aproximaPiR' 1 = 1
 aproximaPiR' n = 1/n^2 + aproximaPiR' (n-1)
 
 -- 4.14 - Sustitución de impares por el siguiente par
+-- -----------------------------------------------------------------------------
 -- 4.14.1 - Definir, por recursión, la función
 --
 -- sustituyeImpar :: [Int] -> [Int]
@@ -889,6 +900,7 @@ prop_sustituyeImpar xs = and [even x | x <- sustituyeImpar xs]
 -- +++ OK, passed 100 tests.
 --
 -- 4.15 - La compra de una persona agarrada
+-- -----------------------------------------------------------------------------
 -- 4.15.1 - Una persona es tan agarrada que sólo compra cuando le hacen un 
 -- descuento del 10% y el precio (con el descuento) es menor o igual que 199.
 -- Definir, usando comprensión, la función
@@ -931,6 +943,7 @@ prop_agarrado xs = abs (agarradoR xs - agarradoC xs) <= 0.1
 -- +++ OK, passed 100 tests.
 --
 -- 4.16 - Descomposición en productos de factores primos
+-- -----------------------------------------------------------------------------
 -- 4.16.1 - Lista de los factores primos de un número
 -- Definir la función
 --
@@ -1054,6 +1067,7 @@ prop_factorizacion n =
 --
 -- 4.17 - Menor número con todos los dígitos en la factorización de su 
 -- factorial
+-- -----------------------------------------------------------------------------
 -- El enunciado del problema 652 de "Números y algo más" es el siguiente:
 --
 -- Si factorizamos los factoriales de un número en función de sus divisores 
@@ -1143,6 +1157,7 @@ solucion =
 -- 49
 --
 -- 4.18 - Suma de números especiales
+-- -----------------------------------------------------------------------------
 -- Los siguientes ejercicios están basados en el problema 357 del proyecto Euler
 -- 4.18.1 - Un número natual n es especial si para todo divisor d de n, d + n/d es primo.
 -- Definir la función
@@ -1200,6 +1215,7 @@ sumaEspecialesR n | especial357 n = n + sumaEspecialesR (n-1)
                   | otherwise  = sumaEspecialesR (n-1)
 
 -- 4.19 - Distancia de Hamming
+-- -----------------------------------------------------------------------------
 -- La distancia de Hamming entre dos listas es el número de posiciones en que
 -- los correspondientes elementos son distintos. Por ejemplo, la distancia de
 -- Hamming entre "roma" y "loba" es 2 (porque hay 2 posiciones en las que los
@@ -1255,6 +1271,7 @@ prop_distancia xs ys =
 -- +++ OK, passed 100 tests.
 --
 -- 4.20 - Traspuesta de una matriz
+-- -----------------------------------------------------------------------------
 -- Definir la función
 -- 
 -- traspuesta :: [[a]] -> [[a]]
@@ -1271,6 +1288,7 @@ traspuesta ((x:xs):xss) =
     (x:[h | (h:_) <- xss]) : traspuesta (xs : [t | (_:t) <- xss])
 
 -- 4.21 - Números expresables como sumas acotadas de elementos de una lista
+-- -----------------------------------------------------------------------------
 -- Definir la función
 --
 -- sumas :: Int -> [Int] -> [Int]
