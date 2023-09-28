@@ -342,3 +342,53 @@ filtraAplica_4 f p = foldr g []
 filtraAplica_4' :: (a -> b) -> (a -> Bool) -> [a] -> [b]
 filtraAplica_4' f p =
     foldr (\x y -> if p x then (f x : y) else y) []
+
+-- 6.10 - Máximo elemento de una lista
+-- -----------------------------------------------------------------------------
+-- 6.10.1 - Definir, mediante recursión, la función
+--
+-- maximumR :: Ord a => [a] -> a
+--
+-- tal que (maximunR xs) es el máximo de la lista xs. Por ejemplo,
+--
+-- maximumR [3,7,2,5] == 7
+--
+-- Nota: La función maximumR es equivalente a la predefinida maximun.
+
+maximumR :: Ord a => [a] -> a
+maximumR [x] = x
+maximumR (x:y:ys) = max x (maximumR (y:ys))
+
+-- 6.10.2 - La función de plegado foldr1 está definida por
+--
+-- foldr1 :: (a -> a -> a) -> [a] -> a
+-- foldr1 _ [x] = x
+-- foldr1 f (x:xs) = f x (foldr1 f xs)
+--
+-- Definir, mediante plegado con foldr1, la función
+--
+-- maximumP :: Ord a => [a] -> a
+--
+-- tal que (maximumR xs) es el máximo de la lista xs. Por ejemplo,
+--
+-- maximumP [3,7,2,5] == 7
+--
+-- Nota: La función maximumP es equivalente a la predefinida maximum.
+
+maximumP :: Ord a => [a] -> a
+maximumP = foldr1 max
+
+-- 6.11 - Mínimo elemento de una lista
+-- -----------------------------------------------------------------------------
+-- Definir, mediante plegado con foldr1, la función
+--
+-- minimunP :: Ord a => [a] -> a
+--
+-- tal que (minimunP xs) es el máximo de la lista xs. Por ejemplo,
+--
+-- minimunP [3,7,2,5] == 2
+--
+-- Nota: La función minimunP es equivalente a la predefinida minimun.
+
+minimunP :: Ord a => [a] -> a
+minimunP = foldr1 min
