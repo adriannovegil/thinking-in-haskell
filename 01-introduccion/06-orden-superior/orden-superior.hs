@@ -1,6 +1,7 @@
 module OrdenSuperior where
 
 import Test.QuickCheck
+import Data.List (inits, tails)
 
 main :: IO ()
 main = return ()
@@ -392,3 +393,490 @@ maximumP = foldr1 max
 
 minimunP :: Ord a => [a] -> a
 minimunP = foldr1 min
+
+-- 6.12 - Inversa de una lista
+-- -----------------------------------------------------------------------------
+-- 6.12.1 - Definir, mediante revursión, la función
+--
+-- inversaR :: [a] -> [a]
+--
+-- tal que (inversaR xs) es la inversa de la lista xs. Por ejemplo,
+--
+-- inversaR [3,5,2,4,7] == [7,4,2,5,3]
+
+inversaR :: [a] -> [a]
+inversaR [] = []
+inversaR (x:xs) = (inversaR xs) ++ [x]
+
+-- 6.12.2 - Definir, mediante plegado, la función
+--
+-- inversaP :: [a] -> [a]
+--
+-- tal que (inversaP xs) es la inversa de la lista xs. Por ejemplo,
+--
+-- inversaP [3,5,2,4,7] == [7,4,2,5,3]
+
+inversaP :: [a] -> [a]
+inversaP = foldr f []
+    where f x y = y ++ [x]
+
+-- La definición anterior puede simplificarse a
+
+inversaP_2 :: [a] -> [a]
+inversaP_2 = foldr f []
+    where f x = (++ [x])
+
+-- 6.12.3 - Definir, por recursión con acumulación, la función
+--
+-- inversaR' :: [a] -> [a]
+--
+-- tal que (inversaR' xs) es la inversa de la lista xs. Por ejemplo,
+--
+-- inversaR' [3,5,2,4,7] == [7,4,2,5,3]
+
+inversaR' :: [a] -> [a]
+inversaR' xs = inversaAux [] xs
+    where inversaAux ys [] = ys
+          inversaAux ys (x:xs) = inversaAux (x:ys) xs
+
+-- 6.12.4 - La función de plegado foldl está definida por
+--
+-- foldl :: (a -> b -> a) -> a -> [b] -> a
+-- foldl f ys xs = aux ys xs
+--     where aux ys [] = ys
+--           aux ys (x:xs) = aux (f ys x) xs
+--
+-- Definir, mediante plegado con foldl, la función
+--
+-- inversaP' :: [a] -> [a]
+--
+-- tal que (inversaP' xs) es la inversa de la lista xs. Por ejemplo,
+--
+-- inversaP' [3,5,2,4,7] == [7,4,2,5,3]
+
+inversaP' :: [a] -> [a]
+inversaP' = foldl f []
+    where f ys x = x:ys
+
+-- La definición anterior puede simplificarse lambda:
+
+inversaP'_2 :: [a] -> [a]
+inversaP'_2= foldl (\ys x -> x:ys) []
+
+-- La definición anterior puede simplificarse usando flip
+
+inversaP'_3 :: [a] -> [a]
+inversaP'_3 = foldl (flip(:)) []
+
+-- 6.12.5 - Comprobar con QuickCheck que las funciones reverse, inversaP e 
+-- inversaP' son equivalentes
+
+prop_inversa :: Eq a => [a] -> Bool
+prop_inversa xs =
+    inversaP xs == ys &&
+    inversaP' xs == ys
+    where ys = reverse xs
+
+--La comprobación es
+--
+-- ghci> quickCheck prop_inversa
+-- +++ OK, passed 100 tests.
+--
+-- 6.12.6 - Comparar la eficiencia de inversaP e inversaP' calculando el 
+-- tiempo y el espacio usado en evaluar las siguientes expresiones:
+--
+-- head (inversaP [1..100000])
+-- head (inversaP' [1..100000])
+--
+-- La sesión es
+--
+-- ghci> :set +s
+-- ghci> head (inversaP [1..100000])
+-- 100000
+-- (0.07 secs, 21,804,464 bytes)
+-- ghci> head (inversaP' [1..100000])
+-- 100000
+-- (0.02 secs, 11,261,696 bytes)
+-- ghci>  :unset +s
+--
+-- 6.13 - Número correspondiente a la lista de sus cifras
+-- -----------------------------------------------------------------------------
+-- 6.13.1 - Definir, por recursión con acumulador, la función
+--
+-- dec2entR :: [Int] -> Int
+--
+-- tal que (dec2entR xs) es el entero correspondiente a la expresión decimal 
+-- xs. Por ejemplo,
+--
+-- dec2entR [2,3,4,5] == 2345
+
+dec2entR :: [Int] -> Int
+dec2entR xs = dec2entR' 0 xs
+    where dec2entR' a [] = a
+          dec2entR' a (x:xs) = dec2entR' (10*a+x) xs
+
+-- 6.13.2 - Definir, por plegado con foldl, la función
+--
+-- dec2entP :: [Int] -> Int
+--
+-- tal que (dec2entP xs) es el entero correspondiente a la expresión decimal 
+-- xs. Por ejemplo
+--
+-- dec2entP [2,3,4,5] == 2345
+
+dec2entP :: [Int] -> Int
+dec2entP = foldl f 0
+    where f a x = 10*a+x
+
+-- La definición puede simplificarse usando lambda:
+
+dec2entP' :: [Int] -> Int
+dec2entP' = foldl (\a x -> 10*a+x) 0
+
+-- 6.14 - Suma de valores de una aplicación a una lista
+-- -----------------------------------------------------------------------------
+-- 6.14.1 - Definir, por recursión, la función
+--
+-- sumaR :: Num b => (a -> b) -> [a] -> b
+--
+-- tal que (suma f xs) es la suma de los valores obtenido aplicando la función 
+-- f a los elementos de la lista xs. Por ejemplo,
+--
+-- sumaR (*2) [3,5,10] == 36
+-- sumaR (/10) [3,5,10] == 1.8
+
+sumaR :: Num b => (a -> b) -> [a] -> b
+sumaR f []     = 0
+sumaR f (x:xs) = f x + sumaR f xs
+
+-- 6.14.2 - Definir, por plegado, la función
+--
+-- sumaP :: Num b => (a -> b) -> [a] -> b
+--
+-- tal que (suma f xs) es la suma de los valores obtenido aplicando la función 
+-- f a los elementos de la lista xs. Por ejemplo,
+--
+-- sumaP (*2) [3,5,10] == 36
+-- sumaP (/10) [3,5,10] == 1.8
+
+sumaP :: Num b => (a -> b) -> [a] -> b
+sumaP f = foldr (\x y -> (f x) + y) 0
+
+-- 6.15 - Redefinición de la función map usando foldr
+-- -----------------------------------------------------------------------------
+-- 6.15.1 - Redefinir, por recursión, la función map. Por ejemplo,
+--
+-- mapR (+2) [1,7,3] == [3,9,5]
+
+mapR :: (a -> b) -> [a] -> [b]
+mapR f []     = []
+mapR f (x:xs) = f x : mapR f xs
+
+-- 6.15.2 - Redefinir, usando foldr, la función map. Por ejemplo, 
+--
+-- mapP (+2) [1,7,3] == [3,9,5]
+
+mapP :: (a -> b) -> [a] -> [b]
+mapP f = foldr g []
+         where g x xs = f x : xs
+
+-- La definición por plegado usando lambda es
+
+mapP' :: (a -> b) -> [a] -> [b]
+mapP' f = foldr (\x y -> f x:y) []
+
+-- Otra definición es
+
+mapP'' :: (a -> b) -> [a] -> [b]
+mapP'' f = foldr ((:) . f) []
+
+-- 6.16 - Redefinición de la función filter usando foldr
+-- -----------------------------------------------------------------------------
+-- 6.16.1 - Redefinir, por recursión, la función filter. Por ejemplo,
+--
+-- filterR (<4) [1,7,3,2] => [1,3,2]
+
+filterR :: (a -> Bool) -> [a] -> [a]
+filterR p [] = []
+filterR p (x:xs) | p x       = x : filterR p xs
+                 | otherwise = filterR p xs
+
+-- 6.16.2 - Redefinir, usando foldr, la función filter. Por ejemplo,
+--
+-- filterP (<4) [1,7,3,2] => [1,3,2]
+
+filterP :: (a -> Bool) -> [a] -> [a]
+filterP p = foldr g []
+    where g x y | p x       = x:y
+                | otherwise = y
+
+-- La definición por plegado y lambda es
+
+filterP' :: (a -> Bool) -> [a] -> [a]
+filterP' p = foldr (\x y -> if (p x) then (x:y) else y) []
+
+-- 6.17 - Suma de las sumas de las listas de una lista de listas
+-- -----------------------------------------------------------------------------
+-- 6.17.1 - Definir, mediante recursión, la función
+--
+-- sumllR :: Num a => [[a]] -> a
+--
+-- tal que (sumllR xss) es la suma de las sumas de las listas de xss. Por 
+-- ejemplo,
+--
+-- sumllR [[1,3],[2,5]] == 11
+
+sumllR :: Num a => [[a]] -> a
+sumllR []       = 0
+sumllR (xs:xss) = sum xs + sumllR xss
+
+-- 6.17.2 - Definir, mediante plegado, la función
+--
+-- sumllP :: Num a => [[a]] -> a
+--
+-- tal que (sumllP xss) es la suma de las sumas de las listas de xss. Por 
+-- ejemplo,
+--
+-- sumllP [[1,3],[2,5]] == 11
+
+sumllP :: Num a => [[a]] -> a
+sumllP = foldr f 0
+    where f xs n = sum xs + n
+
+-- La definición anterior puede simplificarse usando lambda
+
+sumllP' :: Num a => [[a]] -> a
+sumllP' = foldr (\xs n -> sum xs + n) 0
+
+-- 6.17.3 - Definir, mediante recursión con acumulador, la función
+--
+-- sumllA :: Num a => [[a]] -> a
+--
+-- tal que (sumllA xss) es la suma de las sumas de las listas de xss. Por 
+-- ejemplo,
+--
+-- sumllA [[1,3],[2,5]] == 11
+
+sumllA :: Num a => [[a]] -> a
+sumllA xs = aux 0 xs
+    where aux a []       = a
+          aux a (xs:xss) = aux (a + sum xs) xss
+
+-- 6.17.4 - Definir, mediante plegado con foldl, la función
+--
+-- sumllAP :: Num a => [[a]] -> a
+--
+-- tal que (sumllAP xss) es la suma de las listas de xss. Por ejemplo,
+--
+-- sumllAP [[1,3],[2,5]] == 11
+
+sumllAP :: Num a => [[a]] -> a
+sumllAP = foldl (\a xs -> a + sum xs) 0
+
+-- 6.18 - Lista obtenida borrando las ocurrencias de un elemento
+-- -----------------------------------------------------------------------------
+-- 6.18.1 - Definir, mediante recursión, la función
+--
+-- borraR :: Eq a => a -> a -> [a]
+--
+-- tal que (borraR xs) es la lista obtenida borrand las ocurrencias de y en xs. 
+-- Por ejemplo,
+--
+-- borraR 5 [2,3,5,6]   == [2,3,6]
+-- borraR 5 [2,3,5,6,5] == [2,3,6]
+-- borraR 7 [2,3,5,6,5] == [2,3,5,6,5]
+
+borraR :: Eq a => a -> [a] -> [a]
+borraR z [] = []
+borraR z (x:xs) | z == x    = borraR z xs
+                | otherwise = x : borraR z xs
+
+-- 6.18.2 - Definir, mediante plegado, la función
+--
+-- borraP :: Eq a => a -> a -> [a]
+--
+-- tal que (borraP y xs) es la lista obtenida borrando las ocurrencias de y en 
+-- xs. Por ejemplo,
+--
+-- borraP 5 [2,3,5,6]   == [2,3,6]
+-- borraP 5 [2,3,5,6,5] == [2,3,6]
+-- borraP 7 [2,3,5,6,5] == [2,3,5,6,5]
+
+borraP :: Eq a => a -> [a] -> [a]
+borraP z = foldr f []
+    where f x y | z == x    = y
+                | otherwise = x:y
+
+-- La definición por plegado com Lambda es
+
+borraP' :: Eq a => a -> [a] -> [a]
+borraP' z = foldr (\x y -> if z==x then y else x:y) []
+
+-- 6.19 - Diferencia de dos listas
+-- -----------------------------------------------------------------------------
+-- 6.19.1 - Definir, mediante recursión, la función
+--
+-- diferenciaR :: Eq a => [a] -> [a] -> [a]
+--
+-- tal que (difrenciaR xs ys) es la diferencia de conjunto xs e ys; es decir el 
+-- conjunto de los elementos de xs que no pertenecen a ys. Por ejemplo,
+--
+-- diferenciaR [2,3,5,6] [5,2,7] == [3,6]
+
+diferenciaR :: Eq a => [a] -> [a] -> [a]
+diferenciaR xs ys = aux xs xs ys
+    where aux a xs []     = a
+          aux a xs (y:ys) = aux (borraR y a) xs ys
+
+-- La definición, para aproximarse al patrón de plegado, se puede escribir como
+
+diferenciaR' :: Eq a => [a] -> [a] -> [a]
+diferenciaR' xs ys = aux xs xs ys
+    where aux a xs []     = a
+          aux a xs (y:ys) = aux (flip borraR a y) xs ys
+
+-- 6.19.2 - Definir, mediante plegado con foldl, la función
+--
+-- diferenciaP :: Eq a => [a] -> [a] -> [a]
+--
+-- tal que (diferencia xs ys) es la diferencia del conjunto xs e ys; es decir 
+-- el conjunto de los elementos de xs que no pertenecen a ys. Por ejemplo,
+--
+-- diferenciaP [2,3,5,6] [5,2,7] == [3,6]
+
+diferenciaP :: Eq a => [a] -> [a] -> [a]
+diferenciaP xs ys = foldl (flip borraR) xs ys
+
+-- La definición anterior puede simplificarse a
+
+diferenciaP' :: Eq a => [a] -> [a] -> [a]
+diferenciaP' = foldl (flip borraR)
+
+-- 6.20 - Producto de los números que verifican una propiedad
+-- -----------------------------------------------------------------------------
+-- 6.20.1 - Definir mediante plegado la función
+--
+-- producto :: Num a => [a] -> a
+--
+-- tal que (producto xs) es el producto de los elementos de la lista xs. Por 
+-- ejemplo,
+--
+-- producto [2,1,-3,4,5,-6] == 720
+
+producto :: Num a => [a] -> a
+producto = foldr (*) 1
+
+-- 6.20.2 - Definir mediante plegado la función
+--
+-- productoPred :: Num a => (a -> Bool) -> [a] -> a
+--
+-- tal que (productoPred p xs) es el producto de los elementos de la lista xs 
+-- que verifican el predicado p. Por ejemplo,
+--
+-- productoPred even [2,1,-3,4,-5,6] == 48
+
+productoPred :: Num a => (a -> Bool) -> [a] -> a
+productoPred p = foldr (\x y -> if p x then x*y else y) 1
+
+-- 6.20.3 - Definir la función
+--
+-- productoPos :: (Num a, Ord a) => [a] -> a
+--
+-- tal que (productoPos xs) es el producto de los elementos estríctamente 
+-- positivos de la lista xs. Por ejemplo,
+--
+-- productoPos [2,1,-3,4,-5,6] == 48
+
+productoPos :: (Num a, Ord a) => [a] -> a
+productoPos = productoPred (>0)
+
+-- 6.21 - Las cabezas y las colas de una lista
+-- -----------------------------------------------------------------------------
+-- 6-21-1 - Se denomina cola de una lista xs a una sublista no vacía de xs 
+-- formada por un elemento y los siguientes hasta el final. Por ejemplo, [3,4,5] 
+-- es una cola de la lista [1,2,3,4,5].
+-- Definir la función
+--
+-- colas :: [a] -> [[a]]
+--
+-- tal que (colas xs) es la lista de las colas de la lista xs. Por ejemplo,
+--
+-- colas [] == [[]]
+-- colas [1,2] == [[1,2],[2],[]]
+-- colas [4,1,2,5] == [[4,1,2,5],[1,2,5],[2,5],[5],[]]
+
+colas :: [a] -> [[a]]
+colas []     = [[]]
+colas (x:xs) = (x:xs) : colas xs
+
+-- 6.21.2 - Comprobar con QuickCheck que las funciones colas y tails son 
+-- equivalentes.
+
+prop_colas :: [Int] -> Bool
+prop_colas xs = colas xs == tails xs
+
+-- La comprobación es
+--
+-- ghci> quickCheck prop_colas
+-- +++ OK, passed 100 tests.
+--
+-- 6.21.3 - Se denomina cabeza de una lsta xs a una sublista no vacía de xs formada por
+-- el primer elemento y los siguientes hasta uno dado. Por ejemplo, [1,2,3] es 
+-- una cabeza de [1,2,3,4,5].
+-- Definir, por recursión, la función
+--
+-- cabezas :: [a] -> [[a]]
+--
+-- tal que (cabeza xs) es la lista de las cabezas de la lista xs. Por ejemplo,
+--
+-- cabezas []          == [[]]
+-- cabezas [1,4]       == [[],[1],[1,4]]
+-- cabezas [1,4,5,2,3] == [[],[1],[1,4],[1,4,5],[1,4,5,2],[1,4,5,2,3]]
+
+cabezas :: [a] -> [[a]]
+cabezas []     = [[]]
+cabezas (x:xs) = [] : [x:ys | ys <- cabezas xs]
+
+-- 6.21.4 - Definir, por plegado, la función
+--
+-- cabezasP :: [a] -> [[a]]
+--
+-- tal que (cabezasP xs) es la lista de las cabezasP de la lista xs. Por 
+-- ejemplo,
+--
+-- cabezasP []          == [[]]
+-- cabezasP [1,4]       == [[],[1],[1,4]]
+-- cabezasP [1,4,5,2,3] == [[],[1],[1,4],[1,4,5],[1,4,5,2],[1,4,5,2,3]]
+
+cabezasP :: [a] -> [[a]]
+cabezasP = foldr (\x y -> [x]:[x:ys | ys <- y]) []
+
+-- 6.21.5 - Definir, mediante funciones de orden superior, la función
+--
+-- cabezasS :: [a] -> [[a]]
+--
+-- tal que (cabezasS xs) es la lista de las cabezasS de la lista xs. Por 
+-- ejemplo,
+--
+-- cabezasS []          == [[]]
+-- cabezasS [1,4]       == [[],[1],[1,4]]
+-- cabezasS [1,4,5,2,3] == [[],[1],[1,4],[1,4,5],[1,4,5,2],[1,4,5,2,3]]
+
+cabezasS :: [a] -> [[a]]
+cabezasS xs = reverse (map reverse (colas (reverse xs)))
+
+-- La anterior definición puede escribirse sin argumentos como
+
+cabezasS' :: [a] -> [[a]]
+cabezasS' = reverse . map reverse . (colas . reverse)
+
+-- 6.21.6 - Comprobar con QuickCheck que las funciones cabezas y inits son 
+-- equivalentes.
+
+prop_cabezas :: [Int] -> Bool
+prop_cabezas xs = cabezas xs == inits xs
+
+-- La comprobación es
+
+-- ghci> quickCheck prop_cabezas
+-- +++ OK, passed 100 tests.
