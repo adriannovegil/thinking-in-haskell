@@ -74,3 +74,35 @@ repiteFinitaC n x = [x | _ <- [1..n]]
 
 repiteFinita' :: Int -> a -> [a]
 repiteFinita' n x = take n (repite x)
+
+-- 7.2 - Lista obtenida repitiendo cada elemento según su posición
+-- -----------------------------------------------------------------------------
+-- 7.2.1 - Definir, por comprensión, la función
+--
+-- ecoC :: [a] -> [a]
+--
+-- tal que (ecoC xs) es la lista obtenida a partir de la lista xs repitiendo 
+-- cada elemento tantas veces como indica su posición: el primer elemento se 
+-- repite 1 vez, el segundo 2 veces y así sucesivamente. Por ejemplo,
+--
+-- ecoC "abcd"          == "abbcccdddd"
+-- take 10 (ecoC [1..]) == [1,2,2,3,3,3,4,4,4,4]
+
+ecoC :: [a] -> [a]
+ecoC xs = concat [replicate i x | (i,x) <- zip [1..] xs]
+
+-- 7.2.2 - Definir, por recursión, la función
+--
+-- ecoR :: [a] -> [a]
+--
+-- tal que (ecoR xs) es la lista obtenida a partir de la lista xs repitiendo 
+-- cada elemento tantas veces como indica su posición: el primer elemento se 
+-- repite 1 vez, el segundo 2 veces y así sucesivamente. Por ejemplo,
+--
+-- ecoR "abcd" == "abbcccdddd"
+-- take 10 (ecoR [1..]) == [1,2,2,3,3,3,4,4,4,4]
+
+ecoR :: [a] -> [a]
+ecoR xs = aux 1 xs
+    where aux n []     = []
+          aux n (x:xs) = replicate n x ++ aux (n+1) xs
