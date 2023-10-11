@@ -186,7 +186,7 @@ itera f x = x : itera f (f x)
 
 agrupa :: Int -> [a] -> [[a]]
 agrupa n [] = []
-agrupa n xs = take n xs. : agrupa n (drop n xs)
+agrupa n xs = take n xs : agrupa n (drop n xs)
 
 -- 7.6.2 - Definir, la manera no recursiva, la función
 --
@@ -252,13 +252,13 @@ prop_AgrupaCombina n xs =
 -- Se considera la siguiente operación, aplicable a cualquier número entero 
 -- positivo:
 --
--- * Si el número es pa, se divide entre 2.
+-- * Si el número es par, se divide entre 2.
 -- * Si el número es impar, se multiplica por 3 y se suma 1.
 --
--- Dado un número cualquier, podemos considerar su órbita; es decir, las 
+-- Dado un número cualquiera, podemos considerar su órbita; es decir, las 
 -- imágenes sucesivas al iterar la función. Por ejemplo, la órbita de 13 es 13, 
 -- 40, 20, 10, 5, 16, 8, 4, 2, 1, 4, 2, 1, ... Si observamos este ejemplo, la 
--- órbita de 13 es periódica; es decir, se tepita indefinidamente a partir de 
+-- órbita de 13 es periódica; es decir, se repite indefinidamente a partir de 
 -- un momento dado. La conjetura de Collatz dice que siempre alcanzaremos el 1 
 -- para cualquier número con el que comencemos. Ejemplos:
 --
@@ -339,3 +339,205 @@ menorCollatzSupera x =
 
 menorCollatzSupera' :: Integer -> Integer
 menorCollatzSupera' x = head [n | n <- [1..], t <- collatz' n, t > x]
+
+-- 7.8 - Números primos
+-- -----------------------------------------------------------------------------
+-- 7.8.1 - Dfinir la constante
+--
+-- primos :: Integral a => [a]
+--
+-- tal que primos es la lista de los primos mediante la criba de Eratóstenes. 
+-- Ejemplo,
+--
+-- take 10 primos == [2,3,5,7,11,13,17,19,23,29]
+
+primos :: Integral a => [a]
+primos = criba [2..]
+    where criba [] = []
+          criba (n:ns) = n : criba (elimina n ns)
+          elimina n xs = [x | x <- xs, x `mod` n /= 0]
+
+-- 7.9 - Descomposicióncomo suma de dos primos
+-- -----------------------------------------------------------------------------
+-- Definir la función
+--
+-- sumaDeDosPrimos :: Int -> [(Int,Int)]
+--
+-- tal que (sumaDeDosPrimos n) es la lista de las distintas descomposiciones de 
+-- n como suma de dos números primos. Por ejemplo,
+
+sumaDeDosPrimos :: Int -> [(Int,Int)]
+sumaDeDosPrimos n =
+    [(x,n-x) | x <- primosN, x < n-x, elem (n-x) primosN]
+    where primosN = takeWhile (<=n) primos
+
+-- donde primos está definida previamente.
+-- El cálculo es
+--
+-- ghci> head [x | x <- [1..], length (sumaDeDosPrimos x) == 10]
+-- 114
+--
+-- 7.10 - Números expresables como producto de dos primos
+-- -----------------------------------------------------------------------------
+-- Definir la función
+-- 
+-- esProductoDeDosPrimos :: Int -> Bool
+--
+-- tal que (esProductoDeDosPrimos n) se verifica si n es el producto de dos 
+-- primos distintos. Por ejemplo,
+--
+-- esProductoDeDosPrimos 6 == True
+-- esProductoDeDosPrimos 9 == False
+
+esProductoDeDosPrimos :: Int -> Bool
+esProductoDeDosPrimos n =
+    [x | x <- primosN,
+         mod n x == 0,
+         div n x /= x,
+         elem (div n x) primosN] /= []
+    where primosN = takeWhile (<=n) primos
+
+-- 7.11 - Números muy compuestos
+-- -----------------------------------------------------------------------------
+-- 7.11.1 - Un número es muy compuesto si tiene más divisores que sus 
+-- anteriores. Por ejemplo, 12 es muy compuesto porque tiene 6 divisores 
+-- (1,2,3,4,6,12) y todos los número del 1 al 11 tienen menos de 6 divisores.
+-- Definir la función
+--
+-- esMuyCompuesto :: Int -> Bool
+--
+-- tal que (esMuyCompuesto x) se verifica si x es un número muy compuesto. Por
+-- ejemplo,
+--
+-- esMuyCompuesto 24 == True
+-- esMuyCompuesto 25 == False
+
+esMuyCompuesto :: Int -> Bool
+esMuyCompuesto x =
+    and [numeroDivisores y < n | y <- [1..x-1]]
+    where n = numeroDivisores x
+
+-- donde se usan las siguientes funciones auxiliares:
+--
+-- * (numeroDivisores x) es el número de divisores de x. Por ejemplo,
+--
+-- numeroDivisores 24 == 8
+
+numeroDivisores :: Int -> Int
+numeroDivisores = length . divisores
+
+-- * (divisores x) es la lista de los divisores de x. Por ejemplo,
+--
+-- divisores 24 == [1,2,3,4,6,8,12,24]
+
+divisores :: Int -> [Int]
+divisores x = [y | y <- [1..x], mod x y == 0]
+
+-- Los primeros números muy compuestos son
+--
+-- ghci> take 14 [x | x <- [1..], esMuyCompuesto x]
+-- [1,2,4,6,12,24,36,48,60,120,180,240,360,720]
+--
+-- 7.11.2 - Calcular el menor número muy compuesto de 4 cifras.
+-- Solución: El cálculo del menor número muy compuesto de 4 cifras es
+--
+-- ghci> head [x | x <- [1000..], esMuyCompuesto x]
+-- 1260
+--
+-- 7.11.3 - Definir la función
+--
+-- muyCompuesto :: Int -> Int
+--
+-- tal que (muyCompuesto n) es el n-ésimo número muy compuesto. Por ejemplo,
+--
+-- muyCompuesto 10 == 180
+
+muyCompuesto :: Int -> Int
+muyCompuesto n =
+    [x | x <- [1..], esMuyCompuesto x] !! n 
+
+-- 7.12 - Suma de números primos truncables
+-- -----------------------------------------------------------------------------
+-- Los siguientes ejercicios están basados en el problema 37 del proyecto Euler.
+-- Un número primo es truncable si los números que se obtienen eliminado cifras, 
+-- de derecha a izquierda, son primos. Por ejemplo, 599 es un primo truncable 
+-- porque 599. 59 y 5 son primos; en cambio, 577 es un primo no truncable porque
+-- 57 no es primo.
+-- 7.12.1 - Definir la función
+--
+-- primoTruncable :: Int -> Bool
+--
+-- tal que (primoTruncable x) se verifica si x es un primo truncable. Por 
+-- ejemplo,
+--
+-- primoTruncable 599 == True
+-- primoTruncable 577 == False
+
+primoTruncable :: Int -> Bool
+primoTruncable x
+    | x < 10 = primo x
+    | otherwise = primo x && primoTruncable (x `div` 10)
+
+-- donde se usan la función primo definida previamente.
+-- 7.12.2 - Definir la función
+--
+-- sumaPrimosTruncables :: Int -> Int
+--
+-- tal que (sumaPrimosTruncables n) es la suma de los n primeros primos 
+-- truncables. Por ejemplo,
+--
+-- sumaPrimosTruncables 10 == 249
+
+sumaPrimosTruncables :: Int -> Int
+sumaPrimosTruncables n =
+    sum (take n [x | x <- primos, primoTruncable x])
+
+-- 7.12.3 - Calcular la suma de los 20 primeros truncables.
+-- Solución: El cálculo es
+--
+-- ghci> sumaPrimosTruncables 20
+-- 2551
+--
+-- 7.13 - Primos permitables
+-- -----------------------------------------------------------------------------
+-- Un primo permutable es un número primo tal que todos los números obtenidos
+-- permutandos sus cifras son primos. Por ejemplo, 337 es un primo permutable ya
+-- que 337, 373 y 733 son primos.
+-- Definir la función
+--
+-- primoPermutable :: Int -> Bool
+--
+-- tal que (primoPermutable x) se verifica si x es un primo permutable. Por 
+-- ejemplo,
+--
+-- primoPermutable 17 == True
+-- primoPermutable 19 == False
+
+primoPermutable :: Int -> Bool
+primoPermutable x = and [primo y | y <- permutacionesN x]
+
+-- donde (primo x) es
+
+primo :: Integral a => a -> Bool
+primo x = x == head (dropWhile (<x) primos)
+
+-- donde (permutacionesN x) es la lista de los números obtenidos permutando los
+-- dígitos de x. Por ejemplo,
+--
+-- permutacionesN 325 == [325,235,253,352,532,523]
+
+permutacionesN :: Int -> [Int]
+permutacionesN x = [read ys | ys <- permutaciones (show x)]
+
+-- Donde (permutaciones xs) es
+
+permutaciones :: [a] -> [[a]]
+permutaciones [] = [[]]
+permutaciones (x:xs) =
+    concat [intercala x ys | ys <- permutaciones xs]
+
+-- e (intercala x ys) es 
+
+intercala :: a -> [a] -> [[a]]
+intercala x [] = [[x]]
+intercala x (y:ys) = (x:y:ys) : [y:zs | zs <- intercala x ys]
