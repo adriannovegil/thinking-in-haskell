@@ -769,3 +769,67 @@ sumaPrimoMenores :: Int -> Int
 sumaPrimoMenores n = sumaMenores n primos 0
    where sumaMenores n (x:xs) a | n <= x = a
                                 | otherwise = sumaMenores n xs (a+x)
+
+-- donde primos es la lista de los números primos definida previamente
+--
+-- 7.17 - Menor número triangular con más de n divisores
+-----------------------------------------------------------------------------
+-- Problema 12 del proyecto Euler. La sucesión de los números triangulares
+-- se obtiene sumando los números naturales. Así, el 7º número triangular es
+--
+-- 1 + 2 + 3 + 4 + 5 + 6 + 7 = 28.
+--
+-- Los primeros 10 números triangulares son
+--
+-- 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, . . .
+--
+-- Los divisores de los primeros 7 números triangulares son:
+--
+-- 1 : 1
+-- 3 : 1, 3
+-- 6 : 1, 2, 3, 6
+-- 10 : 1, 2, 5, 10
+-- 15 : 1, 3, 5, 15
+-- 21 : 1, 3, 7, 21
+-- 28 : 1, 2, 4, 7, 14, 28
+--
+-- Como sepuede observar, 28 es el número triangular con más de 5 divisores.
+-- Definir la función
+--
+-- euler12 :: Int -> Integer
+--
+-- tal que (euler12 n) es el menor número triangular con más de n divisores.
+-- Por ejemplo,
+--
+-- euler12 5 == 28
+
+euler12 :: Int -> Integer
+euler12 n = head [x | x <- triangulares, nDivisores x > n]
+
+-- donde se usan las siguientes funciones auxiliares
+--
+-- * triangulares es la lista de los números triangulares
+-- 
+-- take 10 triangulares => [1,3,6,10,15,21,28,36,45,55]
+
+triangulares :: [Integer]
+triangulares = 1:[x+y | (x,y) <- zip [2..] triangulares]
+
+-- Otra definición de triangulares es
+
+triangulares' :: [Integer]
+triangulares' = scanl (+) 1 [2..]
+
+-- * (divisores n) es la lista de los divisores de n. Por ejemplo,
+--
+-- divisores 28 == [1,2,4,7,14,28]
+
+divisores2 :: Integer -> [Integer]
+divisores2 x = [y | y <- [1..x], mod x y == 0]
+
+-- * (nDivisores n) es el número de los divisores de n. Por ejemplo,
+--
+-- nDivisores 28 == 6
+
+nDivisores :: Integer -> Int
+nDivisores x = length (divisores2 x)
