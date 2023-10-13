@@ -753,3 +753,19 @@ prop_Hamming n = huecoHamming n' /= []
 -- 
 -- ghci> quickCheck prop_Hamming
 -- OK, passed 100 tests.
+--
+-- 7.16 - Suma de los primos menores que n
+-- -----------------------------------------------------------------------------
+-- Problema 10 del proyecto Euler. Definir la función
+--
+-- sumaPrimoMenores :: Int -> Int
+--
+-- tal que (sumaPrimoMenores 10 n) es la suma de los primos menores que n. Por 
+-- ejemplo,
+--
+-- sumaPrimoMenores 10 == 17
+
+sumaPrimoMenores :: Int -> Int
+sumaPrimoMenores n = sumaMenores n primos 0
+   where sumaMenores n (x:xs) a | n <= x = a
+                                | otherwise = sumaMenores n xs (a+x)
