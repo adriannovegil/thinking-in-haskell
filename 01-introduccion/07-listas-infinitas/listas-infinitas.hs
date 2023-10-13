@@ -622,3 +622,134 @@ posicion2 x = head [n | (n,y) <- zip [0..] enteros, y == x]
 posicion3 :: Int -> Int
 posicion3 x | x >= 0 = 2*x
             | otherwise = 2*(-x)-1
+
+-- 7.15 - La sucesión de Hamming
+-- -----------------------------------------------------------------------------
+-- Los números de Hamming forman una sucesión estrictamente creciente de números
+-- que cumplen las siguientes condiciones:
+--
+-- 1. El número 1 está en la sucesión.
+-- 2. Si x está en la sucesión, entonces 2x, 3x y 5x también están.
+-- 3. Ningún otro número está en la sucesión.
+--
+-- 7.15.1 - Definir la constante
+--
+-- hamming :: [Int]
+--
+-- tal que hamming es la sucesión de Hamming. Por ejemplo,
+--
+-- take 12 hamming == [1,2,3,4,5,6,8,9,10,12,15,16]
+
+hamming :: [Int]
+hamming = 1 : mezcla3 [2*i | i <- hamming]
+                      [3*i | i <- hamming]
+                      [5*i | i <- hamming]
+
+-- donde se usan las siguientes funciones auxiliares
+--
+-- * (mezcla3 xs ys zs) es la lista obtenida mezclando las listas ordenadas xs, 
+-- ys y zs y eliminando los elementos duplicados. Por ejemplo,
+--
+-- ghci> mezcla3 [2,4,6,8,10] [3,6,9,12] [5,10]
+-- [2,3,4,5,6,8,9,10,12]
+
+mezcla3 :: [Int] -> [Int] -> [Int] -> [Int]
+mezcla3 xs ys zs = mezcla2 xs (mezcla2 ys zs)
+
+-- * (mezcla2 xs ys zs) es la lista obtenida mezclando las listas ordenadas xs 
+-- e ys y eliminando los elementos duplicados. Por ejemplo,
+--
+-- ghci> mezcla2 [2,4,6,8,10,12] [3,6,9,12]
+-- [2,3,4,6,8,9,10,12]
+
+mezcla2 :: [Int] -> [Int] -> [Int]
+mezcla2 p@(x:xs) q@(y:ys) | x < y     = x:mezcla2 xs q
+                          | x > y     = y:mezcla2 p ys
+                          | otherwise = x:mezcla2 xs ys
+mezcla2 []       ys                   = ys
+mezcla2 xs       []                   = xs
+
+-- 7.15.2 - Definir la función
+--
+-- divisoresEn :: Int -> [Int] -> Bool
+--
+-- tal que (divisoresEn x ys) se verifica si x se puede expresarse como un 
+-- producto de potencias de elementos de ys. Por ejemplo,
+--
+-- divisoresEn 12 [2,3,5] == True
+-- divisoresEn 14 [2,3,5] == False
+
+divisoresEn :: Int -> [Int] -> Bool
+divisoresEn 1 _                     = True
+divisoresEn x []                    = False
+divisoresEn x (y:ys) | mod x y == 0 = divisoresEn (div x y) (y:ys)
+                     | otherwise    = divisoresEn x ys
+
+-- 7.15.3 - Definir, usando divisoresEn, la constante
+--
+-- hamming' :: [Int]
+--
+-- tal que hamming' es la sucesión de Hamming. Por ejemplo,
+--
+-- take 12 hamming' == [1,2,3,4,5,6,8,9,10,12,15,16]
+
+hamming' :: [Int]
+hamming' = [x | x <- [1..], divisoresEn x [2,3,5]]
+
+-- 7.15.4 - Definir la función
+--
+-- cantidadHammingMenores :: Int -> Int
+--
+-- tal que (cantidadHammingMenores x) es la cantidad de números de Hamming
+-- menores que x. Por ejemplo,
+--
+-- cantidadHammingMenores 6 == 5
+-- cantidadHammingMenores 7 == 6
+-- cantidadHammingMenores 8 == 6
+
+cantidadHammingMenores :: Int -> Int
+cantidadHammingMenores x = length (takeWhile (<x) hamming')
+
+-- 7.15.5 - Definir la función
+--
+-- siguienteHamming :: Int -> Int
+--
+-- tal que (siguienteHamming x) es el menor número de la sucesión de Hamming 
+-- mayor que x. Por ejemplo,
+--
+-- siguienteHamming 6 == 8
+-- siguienteHamming 21 == 24
+
+siguienteHamming :: Int -> Int
+siguienteHamming x = head (dropWhile (<=x) hamming')
+
+-- 7.15.6 - Definir la función
+--
+-- huecoHamming :: Int -> [(Int,Int)]
+--
+-- tal que (huecoHamming n) es la lista de pares de números consecutivos en la 
+-- sucesión de Hamming cuya distancia es mayor que n. Por ejemplo,
+--
+-- take 4 (huecoHamming 2) == [(12,15),(20,24),(27,30),(32,36)]
+-- take 3 (huecoHamming 2) == [(12,15),(20,24),(27,30)]
+-- take 2 (huecoHamming 3) == [(20,24),(32,36)]
+-- head (huecoHamming 10) == (108,120)
+-- head (huecoHamming 1000) == (34992,36000)
+
+huecoHamming :: Int -> [(Int,Int)]
+huecoHamming n = [(x,y) | x <- hamming',
+                          let y = siguienteHamming x,
+                          y-x > n]
+
+-- 7.15.7 - Comprobar con QuickCheck que para todo n, existen pares de números
+-- consecutivos en la sucesión de Hamming cuya distancia es mayor o igual que 
+-- n.
+
+prop_Hamming :: Int -> Bool
+prop_Hamming n = huecoHamming n' /= []
+                 where n' = abs n
+
+-- La comprobación es
+-- 
+-- ghci> quickCheck prop_Hamming
+-- OK, passed 100 tests.
