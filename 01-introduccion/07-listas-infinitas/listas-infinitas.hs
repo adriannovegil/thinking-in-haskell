@@ -541,3 +541,84 @@ permutaciones (x:xs) =
 intercala :: a -> [a] -> [[a]]
 intercala x [] = [[x]]
 intercala x (y:ys) = (x:y:ys) : [y:zs | zs <- intercala x ys]
+
+-- 7.14 - Ordenación de los números enteros
+-- -----------------------------------------------------------------------------
+-- Los números enteros se pueden ordenar como sigue: 0, -1, 1, -2, 2, -3, 3, -4,
+-- 4, -5, 5, -6, 6, -7, 7, ...
+-- 7.14.1 - Definir, por comprensión, la constante
+--
+-- enteros :: [Int]
+--
+-- tal que enteros es la lista de los enteros con la ordenación anterior. Por 
+-- ejemplo,
+--
+-- take 10 enteros == [0,-1,1,-2,2,-3,3,-4,4,-5]
+
+enteros :: [Int]
+enteros = 0 : concat [[-x,x] | x <- [1..]]
+
+-- 7.14.2 - Definir, por iteración, la constante
+--
+-- enteros' :: [Int]
+--
+-- tal que enteros' es la lista de los enteros con la ordenación anterior. Por 
+-- ejemplo,
+--
+-- take 10 enteros' == [0,-1,1,-2,2,-3,3,-4,4,-5]
+
+enteros' :: [Int]
+enteros' = iterate siguiente 0
+    where siguiente x | x >= 0 = -x-1
+                      | otherwise = -x
+
+-- 7.14.3 - Definir, por selección con takeWhile, la función
+--
+-- posicion :: Int -> Int
+--
+-- tal que (posicion x) es la posición del entero x en la ordenación anterior.
+-- Por ejemplo,
+--
+-- posicion 2 == 4
+
+posicion :: Int -> Int
+posicion x = length (takeWhile (/=x) enteros)
+
+-- 7.14.4 - Definir, por recursión, la función
+--
+-- posicion1 :: Int -> Int
+--
+-- tal que (posicion1 x) es la posición del entero x en la ordenación anterior.
+-- Por ejemplo,
+--
+-- posicion1 2 == 4
+
+posicion1 :: Int -> Int
+posicion1 x = aux enteros 0
+ where aux (y:ys) n | x == y = n
+                    | otherwise = aux ys (n+1)
+
+-- 7.14.5 - Definir, por comprensión, la función
+--
+-- posicion2 :: Int -> Int
+--
+-- tal que (posicion2 x) es la posición del entero x en la ordenación anterior.
+-- Por ejempllo,
+--
+-- posicion2 2 == 4
+
+posicion2 :: Int -> Int
+posicion2 x = head [n | (n,y) <- zip [0..] enteros, y == x]
+
+-- 7.14.6 - Definir, sin búsqueda, la función
+--
+-- posicion3 :: Int -> Int
+--
+-- tal que (posicion3 x) es la posición del entero x en la ordenación anterior.
+-- Por ejemplo,
+--
+-- posicion3 2 == 4
+
+posicion3 :: Int -> Int
+posicion3 x | x >= 0 = 2*x
+            | otherwise = 2*(-x)-1
