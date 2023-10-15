@@ -773,7 +773,7 @@ sumaPrimoMenores n = sumaMenores n primos 0
 -- donde primos es la lista de los números primos definida previamente
 --
 -- 7.17 - Menor número triangular con más de n divisores
------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
 -- Problema 12 del proyecto Euler. La sucesión de los números triangulares
 -- se obtiene sumando los números naturales. Así, el 7º número triangular es
 --
@@ -833,3 +833,171 @@ divisores2 x = [y | y <- [1..x], mod x y == 0]
 
 nDivisores :: Integer -> Int
 nDivisores x = length (divisores2 x)
+
+-- 7.18 - Números primos consecutivos con dígitos con igual media
+-- -----------------------------------------------------------------------------
+-- Definir la función
+--
+-- primosEquivalentes :: Int -> [[Integer]]
+--
+-- tal que (primosEquivalentes n) es la lista de las sucesiones de n números
+-- primos consecutivos con la media de sus dígitos iguales. Por ejemplo,
+--
+-- take 2 (primosEquivalentes 2) == [[523,541],[1069,1087]]
+-- head (primosEquivalentes 3) == [22193,22229,22247]
+
+primosEquivalentes :: Int -> [[Integer]]
+primosEquivalentes n = aux primos
+    where aux (x:xs) | relacionados equivalentes ys = ys : aux xs
+                     | otherwise                    = aux xs
+                     where ys = take n (x:xs)
+
+-- Donde primos se ha definido previamente
+-- (relacionados r xs) se define a continuación
+
+relacionados :: (a -> a -> Bool) -> [a] -> Bool
+relacionados r (x:y:zs) = (r x y) && relacionados r (y:zs)
+relacionados _ _ = True
+
+-- (equivalentes x y) se define a continuación
+
+equivalentes :: Integer -> Integer -> Bool
+equivalentes x y = media (digitosC x) == media (digitosC y)
+
+-- (media xs) se define a continuación
+
+media :: [Integer] -> Float
+media xs = (fromIntegral (sum xs)) / (fromIntegral (length xs))
+
+-- (digitosC n) se define a continuación
+
+digitosC :: Integer -> [Integer]
+digitosC n = [read [x] | x <- show n]
+
+-- 7.19 - Decisión de pertenencia al rango de una función creciente
+-- -----------------------------------------------------------------------------
+-- Definir la función
+--
+-- perteneceRango :: Int -> (Int -> Int) -> Bool
+--
+-- tal que (perteneceRango x f) se verifica si x pertenece al rango de la 
+-- función f, suponiendo que f es una función creciente cuyo dominio es el 
+-- conjunto de los números naturales. Por ejemplo,
+--
+-- perteneceRango 5 (\x -> 2*x+1) == True
+-- perteneceRango 1234 (\x -> 2*x+1) == False
+
+perteneceRango :: Int -> (Int -> Int) -> Bool
+perteneceRango y f = y `elem` takeWhile (<=y) (imagenes f)
+    where imagenes f = [f x | x <- [0..]]
+
+-- 7.20 - Pares ordenados por posición
+-- -----------------------------------------------------------------------------
+-- 7.20.1 - Definir, por recursión, la función
+--
+-- paresOrdenados :: [a] -> [(a,a)]
+--
+-- tal que (paresOrdenados xs) es la lista de todos los pares de elementos 
+-- (x,y) de xs, tales que x ocurren en xs antes que y. Por ejemplo,
+--
+-- paresOrdenados [3,2,5,4] == [(3,2),(3,5),(3,4),(2,5),(2,4),(5,4)]
+-- paresOrdenados [3,2,5,3] == [(3,2),(3,5),(3,3),(2,5),(2,3),(5,3)]
+
+paresOrdenados :: [a] -> [(a,a)]
+paresOrdenados []     = []
+paresOrdenados (x:xs) = [(x,y) | y <- xs] ++ paresOrdenados xs
+
+-- 7.20.2 - Definir, por plegado, la función
+--
+-- paresOrdenados2 :: [a] -> [(a,a)]
+--
+-- tal que (paresOrdenados2 xs) es la lista de todos los pares de elementos 
+-- (x,y) de xs, tales que x ocurren en xs antes que y. Por ejemplo,
+--
+-- paresOrdenados2 [3,2,5,4] == [(3,2),(3,5),(3,4),(2,5),(2,4),(5,4)]
+-- paresOrdenados2 [3,2,5,3] == [(3,2),(3,5),(3,3),(2,5),(2,3),(5,3)]
+
+paresOrdenados2 :: [a] -> [(a,a)]
+paresOrdenados2 [] = []
+paresOrdenados2 (x:xs) =
+    foldr (\y ac -> (x,y):ac) (paresOrdenados2 xs) xs
+
+-- 7.20.3 - Definir, usando repeat, la función
+--
+-- paresOrdenados3 :: [a] -> [(a,a)]
+--
+-- tal que (paresOrdenados3 xs) es la lista de todos los pares de elementos 
+-- (x,y) de xs, tales que x ocurren en xs antes que y. Por ejemplo,
+--
+-- paresOrdenados3 [3,2,5,4] == [(3,2),(3,5),(3,4),(2,5),(2,4),(5,4)]
+-- paresOrdenados3 [3,2,5,3] == [(3,2),(3,5),(3,3),(2,5),(2,3),(5,3)]
+
+paresOrdenados3 :: [a] -> [(a,a)]
+paresOrdenados3 []     = []
+paresOrdenados3 (x:xs) = zip (repeat x) xs ++ paresOrdenados3 xs
+
+-- 7.21 - Aplicación iterada de una fucnión
+-- -----------------------------------------------------------------------------
+-- 7.21.1 - Definir, por recursión, la función
+--
+-- potenciaFunc :: Int -> (a -> a) -> a -> a
+--
+-- tal que (potenciaFunc n f x) es el resultado de aplicar n veces la función f
+-- a x. Por ejemplo,
+--
+-- potenciaFunc 3 (*10) 5 == 5000
+-- potenciaFunc 4 (+10) 5 == 45
+
+potenciaFunc :: Int -> (a -> a) -> a -> a
+potenciaFunc 0 _ x = x
+potenciaFunc n f x = potenciaFunc (n-1) f (f x)
+
+-- 7.21.2 - Definir, sin recursión, la función
+--
+-- potenciaFunc2 :: Int -> (a -> a) -> a -> a
+--
+-- tal que (potenciaFunc2 n f x) es el resultado de aplicar n veces la función f
+-- a x. Por ejemplo,
+--
+-- potenciaFunc2 3 (*10) 5 == 5000
+-- potenciaFunc2 4 (+10) 5 == 45
+
+potenciaFunc2 :: Int -> (a -> a) -> a -> a
+potenciaFunc2 n f x = last (take (n+1) (iterate f x))
+
+-- 7.22 - Expresión de un número como suma de dos de una lista
+-- -----------------------------------------------------------------------------
+-- 7.22.1 - Definir, por recursión, la función
+--
+-- sumaDeDos :: Int -> [Int] -> Maybe (Int,Int)
+--
+-- tal que (sumaDeDos x ys) decide si x puede expresarse como suma de dos 
+-- elementos de ys y, en su caso, devuelve un par de elementos de ys cuya suma 
+-- es x. Por ejemplo,
+--
+-- sumaDeDos 9 [7,4,6,2,5] == Just (7,2)
+-- sumaDeDos 5 [7,4,6,2,5] == Nothing
+
+sumaDeDos :: Int -> [Int] -> Maybe (Int,Int)
+sumaDeDos _ []  = Nothing
+sumaDeDos _ [_] = Nothing
+sumaDeDos y (x:xs) | y-x `elem` xs = Just (x,y-x)
+                   | otherwise     = sumaDeDos y xs
+
+-- 7.22.2 - Definir, usando la función paresOrdenados, definida antes, la 
+-- función
+--
+-- sumaDeDos' :: Int -> [Int] -> Maybe (Int,Int)
+--
+-- tal que (sumaDeDos' x ys) decide si x puede expresarse como suma de dos 
+-- elementos de ys y, en su caso, devuelve un par de elementos de ys cuya suma 
+-- es x. Por ejemplo,
+--
+-- sumaDeDos' 9 [7,4,6,2,5] == Just (7,2)
+-- sumaDeDos' 5 [7,4,6,2,5] == Nothing
+
+sumaDeDos' :: Int -> [Int] -> Maybe (Int,Int)
+sumaDeDos' x xs
+    | null ys   = Nothing
+    | otherwise = Just (head ys)
+    where ys = [(a,b) | (a,b) <- paresOrdenados xs , a+b == x]
